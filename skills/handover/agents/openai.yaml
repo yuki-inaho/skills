@@ -1,0 +1,6 @@
+interface:
+  display_name: "Handover"
+  short_description: "Generate a Japanese Auto-Compact handover document."
+  default_prompt: "現在の作業状況を引き継ぎ文書としてまとめて"
+policy:
+  allow_implicit_invocation: false
