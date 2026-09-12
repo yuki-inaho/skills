@@ -48,6 +48,13 @@ Q<番号>（枝）: <質問>
 - 同じ論点が再出現: 前ラウンドの回答を引用して「これで確定か」と 1 問だけ確認する。
 - ユーザーが数を指定できない: 10 問で出し、「増減は言ってください」と添える。
 
+## Origin / License
+
+- 着想元: [mattpocock/skills — grill-me / grilling](https://github.com/mattpocock/skills/tree/main/skills/productivity)（MIT License, Copyright (c) 2026 Matt Pocock）。
+  上流の現行版は「設計木（design tree）の frontier をラウンドで一括質問」する方式で、本スキルの一括バッチ方針はこれに沿っている。
+- 本スキルは**日本語環境向けに再構成した独自実装**（指定数の一括出力・「なぜ/推奨」必須・最大 3 ラウンド・質問バンク）。
+  ライセンス条件に従い、帰属表示と MIT ライセンス全文を `LICENSE` に同梱する。
+
 ## Growth log
 
 - 追記先: [references/growth-log.md](references/growth-log.md)。
