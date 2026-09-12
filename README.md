@@ -8,7 +8,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | スキル | 用途 |
 | --- | --- |
 | [`jax-performance-tuning`](skills/jax-performance-tuning/SKILL.md) | JAX のコンパイルキャッシュ・BF16/AMP・micro-batch・remat・プロファイリング・Blackwell/cuDNN9 安定化 |
-| [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` で軽量化し段階的に読む |
+| [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` で軽量化し段階的に読む（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |

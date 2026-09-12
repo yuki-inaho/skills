@@ -37,6 +37,8 @@ OpenCode run JSONLにはユーザープロンプトとモデル名が含まれ�
 
 ## Step 0 — ensure the binary
 
+- 配布元（大本）リポジトリ: https://github.com/yuki-inaho/agent-jsonl-compact
+
 ```bash
 command -v agent-jsonl-compact && agent-jsonl-compact --version
 ```
@@ -47,8 +49,9 @@ command -v agent-jsonl-compact && agent-jsonl-compact --version
 # prebuilt (Linux x86_64 musl)
 curl -fsSL https://raw.githubusercontent.com/yuki-inaho/agent-jsonl-compact/main/install.sh | bash
 
-# またはソースから(リポジトリ内で)
-just install        # ~/.local/bin/agent-jsonl-compact
+# またはソースから（配布元リポジトリを clone して）
+git clone https://github.com/yuki-inaho/agent-jsonl-compact.git
+cd agent-jsonl-compact && just install    # ~/.local/bin/agent-jsonl-compact
 ```
 
 ## Step 1 — (任意) 形式とレコード分布だけ確認
