@@ -1,0 +1,6 @@
+interface:
+  display_name: "Supervisor Orchestration"
+  short_description: "Lead subagents as a supervisor: route, verify, integrate."
+  default_prompt: "監督エージェントとして、サブエージェントに分担させて進めて"
+policy:
+  allow_implicit_invocation: false

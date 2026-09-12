@@ -1,0 +1,6 @@
+interface:
+  display_name: "MuJoCo Web (WASM) Demo"
+  short_description: "Render MuJoCo in the browser with WASM + three.js and drive it with playwright-cli."
+  default_prompt: "MuJoCo のブラウザデモを作ってスクリーンショットを撮って"
+policy:
+  allow_implicit_invocation: false

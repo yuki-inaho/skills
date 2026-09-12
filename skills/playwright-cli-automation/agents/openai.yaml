@@ -1,0 +1,6 @@
+interface:
+  display_name: "Playwright CLI Automation"
+  short_description: "Drive a browser autonomously with the global playwright-cli and capture screenshots."
+  default_prompt: "playwright-cli でページを操作してスクリーンショットを撮って"
+policy:
+  allow_implicit_invocation: false

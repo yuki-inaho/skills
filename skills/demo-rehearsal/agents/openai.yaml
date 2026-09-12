@@ -1,0 +1,6 @@
+interface:
+  display_name: "Demo Rehearsal"
+  short_description: "Rehearse a demo with timing design and audience-agent PDCA."
+  default_prompt: "デモをリハーサルして、聴衆エージェントで評価して"
+policy:
+  allow_implicit_invocation: false
