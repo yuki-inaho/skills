@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grill Me (Batch)"
+  short_description: "Stress-test a plan with a user-specified number of hard questions in one batch."
+  default_prompt: "この計画に10個の質問を一括で投げて"
+policy:
+  allow_implicit_invocation: false
