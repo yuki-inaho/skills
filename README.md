@@ -17,11 +17,41 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 `agents/openai.yaml` を同梱。`write-workdoc-uv` と `review-written-workdoc` には
 `references/` にテンプレート / rubric を同梱。
 
-## インストール
+## クイックインストール（curl）
+
+`install.sh` が Claude Code / Codex CLI / OpenCode のスキルディレクトリへ導入します。
+clone も git も不要です。
 
 ```bash
-# 例: Claude Code の personal skills へ
+# 既存のエージェント（~/.claude, ~/.codex, ~/.config/opencode）を自動検出して導入
+curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh | bash
+
+# エージェントを指定（claude / codex / opencode / all）
+curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh | bash -s -- --agent claude
+
+# スキルを指定（繰り返し指定可。既定は all）
+curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh | bash -s -- \
+  --agent codex --skill handover --skill write-workdoc-uv
+
+# インストール先を直接指定
+curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh | bash -s -- \
+  --dest "$HOME/.claude/skills"
+
+# 何がどこに入るか確認だけ（書き込まない）
+curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh | bash -s -- --dry-run
+```
+
+- `--agent` 省略時は既存ディレクトリを自動検出し、無ければ 3 つすべての既定パスへ導入。
+- `--ref <branch-or-tag>` で取得する ref を変更可（既定 `main`）。
+- 環境変数: `CLAUDE_HOME` / `CODEX_HOME` / `XDG_CONFIG_HOME`、および
+  `CLAUDE_SKILLS_DIR` / `CODEX_SKILLS_DIR` / `OPENCODE_SKILLS_DIR` でパスを上書きできます。
+
+## インストール（手動 / git clone）
+
+```bash
 git clone https://github.com/yuki-inaho/skills.git
+
+# 例: Claude Code の personal skills へ
 cp -r skills/skills/<skill-name> ~/.claude/skills/
 
 # 例: OpenCode へ
