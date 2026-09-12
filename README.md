@@ -12,6 +12,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |
+| [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
 | [`supervisor-orchestration`](skills/supervisor-orchestration/SKILL.md) | 監督エージェントの振り分け・検証・統合（Bloom ルーティング、サブエージェント並列、成長ログ） |
 | [`demo-rehearsal`](skills/demo-rehearsal/SKILL.md) | デモの時間設計（説明秒・理解待ち秒）と聴衆エージェント PDCA（汎用ペルソナ付き） |
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |
@@ -19,7 +20,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 
 `write-workdoc-uv` / `review-written-workdoc` / `handover` / `supervisor-orchestration` /
 `demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` には Codex 等向けの
-`agents/openai.yaml` を同梱。`write-workdoc-uv` と `review-written-workdoc` には
+`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` と `review-written-workdoc` には
 `references/` にテンプレート / rubric を同梱。
 
 ## クイックインストール（curl）
