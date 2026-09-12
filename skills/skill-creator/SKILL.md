@@ -52,7 +52,7 @@ python3 skills/skill-creator/scripts/validate_skill.py skills/handover
 
 - `validate_skill.py` が hard error 0 で終了（警告は内容を確認して取捨）。
 - 追加したスキルの `## Verification` が実コマンドと期待値で書かれている。
-- 公開先へ入れる前に、秘密情報・固有パスの走査（例: `grep -rniE "社内|秘密|password|token|<固有名>"`）を 1 回実行する。
+- 公開先へ入れる前に、秘密情報・固有パスの走査（例: `grep -rniE "(secret|password|token|/home/|<internal-name>)"`）を 1 回実行する。
 
 ## Failure handling
 
