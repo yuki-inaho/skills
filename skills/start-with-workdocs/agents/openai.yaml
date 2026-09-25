@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start With Workdocs"
+  short_description: "Execute a workdoc checklist one item at a time until the DoD is met."
+  default_prompt: "start-with-workdocs: Show the workdoc path, then execute its checklist top-down, logging after each checked item, until every item and the definition of done are satisfied."

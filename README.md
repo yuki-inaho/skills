@@ -11,6 +11,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` で軽量化し段階的に読む（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
+| [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き） |
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |
 | [`grill-me`](skills/grill-me/SKILL.md) | 設計木の **frontier を 1 ラウンドで一括**質問（上限は指定数・既定10）。事実は自分で調査し、決定だけを聞く。各問に「なぜ/推奨」 |
 | [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
@@ -19,7 +20,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |
 | [`mujoco-web-wasm-demo`](skills/mujoco-web-wasm-demo/SKILL.md) | MuJoCo をブラウザで（公式 WASM + three.js）。フック公開とスクショ検証 |
 
-`write-workdoc-uv` / `review-written-workdoc` / `handover` / `supervisor-orchestration` /
+`write-workdoc-uv` / `review-written-workdoc` / `start-with-workdocs` / `handover` / `supervisor-orchestration` /
 `demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` には Codex 等向けの
 `agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` と `review-written-workdoc` には
 `references/` にテンプレート / rubric を同梱。
