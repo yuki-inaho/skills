@@ -11,7 +11,11 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` で軽量化し段階的に読む（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
-| [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き） |
+| [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き。利用者の指示文をそのまま使う簡易版） |
+| [`start-work-with-docs`](skills/start-work-with-docs/SKILL.md) | 上の詳細版（常用版）。開始時確認、1 項目ずつの対象・完了条件・変更範囲の明示、失敗時は `[ ]` のまま記録、N（既定 40）の変更規則、DoD と成果物実在まで確認する完了判定 |
+| [`check-finished-workdoc`](skills/check-finished-workdoc/SKILL.md) | 完了した workdoc の目的・DoD を実際のリポジトリ状態と照合し、証跡付きの「完了照合・調査分析サマリ」章を追記（テンプレート付き） |
+| [`start-work-audit-pattern`](skills/start-work-audit-pattern/SKILL.md) | workdoc を正本に、統括・作業・監査の 3 役エージェントで逐次開発するパターン（プロンプトと役割ファイルのテンプレート付き） |
+| [`write-workdoc-docker`](skills/write-workdoc-docker/SKILL.md) | `write-workdoc-uv` の Docker / docker compose 版（テンプレート付き） |
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |
 | [`grill-me`](skills/grill-me/SKILL.md) | 設計木の **frontier を 1 ラウンドで一括**質問（上限は指定数・既定10）。事実は自分で調査し、決定だけを聞く。各問に「なぜ/推奨」 |
 | [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
@@ -20,10 +24,11 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |
 | [`mujoco-web-wasm-demo`](skills/mujoco-web-wasm-demo/SKILL.md) | MuJoCo をブラウザで（公式 WASM + three.js）。フック公開とスクショ検証 |
 
-`write-workdoc-uv` / `review-written-workdoc` / `start-with-workdocs` / `handover` / `supervisor-orchestration` /
+`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` / `start-with-workdocs` / `start-work-with-docs` /
+`check-finished-workdoc` / `start-work-audit-pattern` / `handover` / `supervisor-orchestration` /
 `demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` には Codex 等向けの
-`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` と `review-written-workdoc` には
-`references/` にテンプレート / rubric を同梱。
+`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
+`check-finished-workdoc` には `references/` にテンプレート / rubric、`start-work-audit-pattern` には `assets/` にプロンプトと役割ファイルを同梱。
 
 ## クイックインストール（curl）
 
@@ -84,7 +89,9 @@ cp -r skills/skills/<skill-name> ~/.codex/skills/
 ## 由来
 
 2026-09-12 時点で著者のローカルスキルライブラリから、JAX GPU 学習プロジェクトで
-実際に使用したスキルを抽出して配置した。
+実際に使用したスキルを抽出して配置した。2026-09-28 に、常用している workdoc 系スキル
+（`start-work-with-docs` / `check-finished-workdoc` / `start-work-audit-pattern` / `write-workdoc-docker`）を追加し、
+`agent-jsonl-compact-reader` を配布元の最新版へ更新した。
 
 ## ライセンス
 

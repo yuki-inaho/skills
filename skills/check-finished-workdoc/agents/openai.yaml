@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Finished Workdoc"
+  short_description: "Check workdoc completion evidence."
+  default_prompt: "check_finished_workdoc: Check the target workdoc against actual completion evidence and add a completion analysis summary chapter."

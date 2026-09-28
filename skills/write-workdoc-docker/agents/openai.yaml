@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Workdoc Docker"
+  short_description: "Create detailed Docker/docker-compose-based workdoc plans in temp/."
+  default_prompt: "write_workdoc_docker: Create a detailed self-contained Docker/docker-compose workdoc for the requested task."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Work Audit Pattern"
+  short_description: "Run plan-driven work with worker and audit roles"
+  default_prompt: "Use start-work-audit-pattern with the given workdoc plan and run the checklist step by step with worker and audit roles."
