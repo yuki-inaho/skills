@@ -17,3 +17,10 @@ Use full-column rank as a local sufficient condition at regular points; do not u
 Validate every start boundary: all invalid, one invalid, ordinary valid, and optional information diagnostics with no clock variable. Save failures before any post-fit projection that can throw. A converged constant-penalty invalid state is a failure. Keep the full object/scene population even when no detection, no initialization or no valid estimate exists.
 
 Compare common observations and initial shapes separately from compute budget. A robust continuation after another solver has extra computation. Use new development/evaluation namespaces when scene generators share random seeds. Preserve an already-started or failed pilot with its exclusion reason; never silently relabel it as a new heldout scene.
+
+
+## Calibrated improvement and reproduction claims
+
+When replacing image-time pose corrections with raw measurement knots, list the representation change, residual coordinates, covariance calibration, optimizer continuation, and any added motion prior separately. A successful comparison of the combined change does not isolate one component's causal effect. A process prior expressed as unscaled high-order discrete differences depends on knot spacing and units; do not transfer its weights unchanged to another sampling interval.
+
+A single-scene reproduction can verify numerical reproducibility while failing the registered-cohort adoption check. Formal success gates require the complete declared roster and population. Preserve the original summary when correcting a reporting bug, record source import/freeze chronology, and keep replay outputs separate from both development and evaluation evidence. Replaying a previously inspected seed is not fresh validation.
