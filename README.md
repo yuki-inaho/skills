@@ -19,6 +19,7 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |
 | [`grill-me`](skills/grill-me/SKILL.md) | 設計木の **frontier を 1 ラウンドで一括**質問（上限は指定数・既定10）。事実は自分で調査し、決定だけを聞く。各問に「なぜ/推奨」 |
 | [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
+| [`verify-ellipsoid-reconstruction`](skills/verify-ellipsoid-reconstruction/SKILL.md) | 投影楕円から未知3D楕円体を復元する研究の監査。可観測性・遮蔽・姿勢/時刻誤差・全物体分母・凍結実験・指標契約を確認する（検証器付き） |
 | [`supervisor-orchestration`](skills/supervisor-orchestration/SKILL.md) | 監督エージェントの振り分け・検証・統合（Bloom ルーティング、サブエージェント並列、成長ログ） |
 | [`demo-rehearsal`](skills/demo-rehearsal/SKILL.md) | デモの時間設計（説明秒・理解待ち秒）と聴衆エージェント PDCA（汎用ペルソナ付き） |
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |

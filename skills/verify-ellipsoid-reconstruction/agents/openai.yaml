@@ -1,0 +1,4 @@
+interface:
+  display_name: "楕円体復元の根拠検証"
+  short_description: "投影楕円からの復元・遮蔽・対応付けを観測条件と実行証拠で点検する"
+  default_prompt: "Use $verify-ellipsoid-reconstruction to audit the current ellipsoid reconstruction theory, observations, experiments, and evidence, then apply safe improvements."
