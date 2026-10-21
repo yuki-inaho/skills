@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harness2 Portable Workflow"
+  short_description: "Audit a substantial Harness² propose-probe-compose run with honest evidence."
+  default_prompt: "Harness² の改善 run を、比較条件を固定して監査したい"

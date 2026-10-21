@@ -9,12 +9,19 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 個別案件の理論、評価条件、結果、作業記録、実行基盤が生成した案件専用のスキルは、その案件側で管理する。
 既存スキルや利用ツールの機能で足りる場合は、新しいスキルを追加しない。
 
+公開物の位置づけ・互換性の意味・禁止情報・由来の扱いは
+[`docs/PUBLIC_SKILLS_POLICY.md`](docs/PUBLIC_SKILLS_POLICY.md) に定める。
+Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める」意味であり、
+ランタイムやバックエンドが同一であること、リポジトリ全体を監査済みであることを意味しない。
+検証は合成サンプルに対するもので、実データへの一般保証ではない。
+
 ## 収録スキル
 
 | スキル | 用途 |
 | --- | --- |
 | [`jax-performance-tuning`](skills/jax-performance-tuning/SKILL.md) | JAX のコンパイルキャッシュ・BF16/AMP・micro-batch・remat・プロファイリング・Blackwell/cuDNN9 安定化 |
-| [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` で軽量化し段階的に読む（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
+| [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | 巨大な Codex / Claude Code / OpenCode セッション JSONL を `agent-jsonl-compact` ≥0.3.0 の `sessions`/`view`/`search` で根拠位置つきに読み、旧版は legacy 抽出へフォールバック（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
+| [`harness2-portable-workflow`](skills/harness2-portable-workflow/SKILL.md) | Harness² の Propose–Probe–Compose を、比較条件を固定し選定後の再評価まで含めて監査（合成タスク・証跡重視。出典: https://github.com/yuki-inaho/harness2 / 上流 Google Research, Apache-2.0） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き。利用者の指示文をそのまま使う簡易版） |
@@ -29,10 +36,11 @@ Claude Code / OpenCode / Codex 等のスキル機構で使える `SKILL.md` 形�
 | [`demo-rehearsal`](skills/demo-rehearsal/SKILL.md) | デモの時間設計（説明秒・理解待ち秒）と聴衆エージェント PDCA（汎用ペルソナ付き） |
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |
 | [`mujoco-web-wasm-demo`](skills/mujoco-web-wasm-demo/SKILL.md) | MuJoCo をブラウザで（公式 WASM + three.js）。フック公開とスクショ検証 |
+| [`public-repository-privacy-review`](skills/public-repository-privacy-review/SKILL.md) | 公開リポジトリへ出す直前の点検（公開境界・差分・例/fixture・docs・metadata・PR 本文/コメント。機械走査は手掛かり限定、承認ゲートにはしない） |
 
 `write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` / `start-with-workdocs` / `start-work-with-docs` /
 `check-finished-workdoc` / `start-work-audit-pattern` / `handover` / `supervisor-orchestration` /
-`demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` には Codex 等向けの
+`demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` / `harness2-portable-workflow` には Codex 等向けの
 `agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
 `check-finished-workdoc` には `references/` にテンプレート / rubric、`start-work-audit-pattern` には `assets/` にプロンプトと役割ファイルを同梱。
 
@@ -61,6 +69,10 @@ curl -fsSL https://raw.githubusercontent.com/yuki-inaho/skills/main/install.sh |
 ```
 
 - `--agent` 省略時は既存ディレクトリを自動検出し、無ければ 3 つすべての既定パスへ導入。
+- `--agent all` は Claude Code / Codex CLI / OpenCode の 3 つ。バイナリ同梱の
+  `agent-jsonl-compact install-skills` は Claude Code と Codex の 2 つだけで、OpenCode は対象外。
+- 既存の同名スキルディレクトリは置き換える（`rm -rf` 後にコピー）。上書きを避けたい場合は
+  `--dest` で別ディレクトリへ入れる。
 - `--ref <branch-or-tag>` で取得する ref を変更可（既定 `main`）。
 - 環境変数: `CLAUDE_HOME` / `CODEX_HOME` / `XDG_CONFIG_HOME`、および
   `CLAUDE_SKILLS_DIR` / `CODEX_SKILLS_DIR` / `OPENCODE_SKILLS_DIR` でパスを上書きできます。
@@ -101,4 +113,5 @@ cp -r skills/skills/<skill-name> ~/.codex/skills/
 
 ## ライセンス
 
-特に指定なし（必要なら Issue で連絡）。
+特に指定なし（必要なら Issue で連絡）。スキル個別に `LICENSE` がある場合は、
+そのライセンスが優先される（例: `grill-me`）。
