@@ -56,6 +56,9 @@ Evaluate the document against these questions:
 - Are implicit fallbacks avoided, with explicit blockage handling instead?
 - Does the document support audit traceability through IDs, evidence locations, command outputs, and work log instructions?
 - Is the definition of done specific enough to decide completion objectively?
+- Does the definition of done cover the user's requested quality or performance outcome, rather than only successful execution and saved reports? Keep unmet outcome gates unchecked even when implementation and review are complete. A plan-only deliverable may pass review while future implementation gates remain open.
+- Are measured results, proposed targets, and literature claims distinguished? For experiments, inspect baseline/input identity, sample selection, denominators, exclusions, and timing scope. Check whether independent evidence supports an accuracy claim, or only numerical consistency supports a narrower claim.
+- Is the latest verified artifact/source clearly identified without erasing historical failures? After a scoped fix, recheck affected evidence; do not repeat unaffected model runs or tests merely to review corrected prose.
 
 ## Output Format
 
@@ -92,6 +95,8 @@ Use this format unless the user asks for another one:
 **Recommended Patch Scope**
 - <残修正がある場合、どの章をどう直すべきか。なければ「なし」。>
 ```
+
+For a scoped review, use `not_applicable` with a short reason for coverage fields outside that scope; do not turn an intentionally excluded topic into a missing requirement. An applicable but unmet requirement still needs a finding.
 
 Severity labels:
 
