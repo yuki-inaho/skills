@@ -1,0 +1,8 @@
+{"timestamp":"2026-10-01T00:00:00Z","type":"session_meta","payload":{"id":"sample-session-1","cwd":"/work/sample-repo","originator":"sample-cli","cli_version":"0.0.0"}}
+{"timestamp":"2026-10-01T00:00:01Z","type":"event_msg","payload":{"type":"user_message","message":"please inspect sample_marker in the sample pipeline"}}
+{"timestamp":"2026-10-01T00:00:02Z","type":"response_item","payload":{"type":"message","role":"developer","content":[{"type":"input_text","text":"SENTINEL_DEVELOPER_TEXT"}]}}
+{"timestamp":"2026-10-01T00:00:03Z","type":"event_msg","payload":{"type":"agent_message","phase":"final","message":"sample_marker looks consistent"}}
+{"timestamp":"2026-10-01T00:00:04Z","type":"response_item","payload":{"type":"reasoning","summary":[{"type":"summary_text","text":"SENTINEL_REASONING_TEXT"}],"content":null,"encrypted_content":"SAMPLE_ENCRYPTED"}}
+{"timestamp":"2026-10-01T00:00:05Z","type":"response_item","payload":{"type":"function_call","name":"sample_tool","call_id":"call-1","arguments":"{\"command\":\"echo sample_marker\"}"}}
+{"timestamp":"2026-10-01T00:00:06Z","type":"response_item","payload":{"type":"function_call_output","call_id":"call-1","output":{"content":"sample_marker output line"}}}
+{"timestamp":"2026-10-01T00:00:07Z","type":"response_item","payload":{"type":"function_call_output","call_id":"call-orphan","output":{"content":"orphan output line"}}}
