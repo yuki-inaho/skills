@@ -1,5 +1,15 @@
 {
   "schema_version": 1,
-  "geometry": {"leaf_asymmetry": 0.10, "leaf_fold": 0.12, "leaf_droop": 0.10, "leaf_edge_waviness": 0.04, "calyx_recurvature": 0.12},
-  "materials": {"leaf_noise_strength": 0.12, "leaf_roughness": 0.55, "fruit_roughness": 0.30}
+  "geometry": {
+    "leaf_asymmetry": 0.1,
+    "leaf_fold": 0.2,
+    "leaf_droop": 0.17,
+    "leaf_edge_waviness": 0.04,
+    "calyx_recurvature": 0.12
+  },
+  "materials": {
+    "leaf_noise_strength": 0.12,
+    "leaf_roughness": 0.55,
+    "fruit_roughness": 0.3
+  }
 }
