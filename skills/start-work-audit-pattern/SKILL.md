@@ -74,6 +74,8 @@ If the runtime has no subagent feature, emulate the roles in separate labeled bl
 
 For Codex, prefer available multi-agent tools when present. For Claude Code, use its available subagent/task mechanism. Do not invent tool calls that are not available in the current runtime.
 
+For OpenCode workers shown in user-visible Herdr panes, use the `herdr-opencode-agmsg` skill when available for the roster, ACK/READY, provider fallback and owned-tab cleanup gates.
+
 ## Workdoc Integration
 
 If the user asks to write a new workdoc, use `write-workdoc-uv` when available.

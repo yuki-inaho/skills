@@ -55,6 +55,7 @@ description: Use when acting as a supervisor (lead) agent that routes work to su
 
 ## 境界・安全
 
+- ユーザー可視の Herdr ペインで OpenCode ワーカーを統括する場合は、`herdr-opencode-agmsg`（同梱されていれば）の roster・ACK/READY・provider 切替・owned tab 終了条件を併用する。
 - push は明示指示時のみ（commit は依頼時のみ）。
 - 会話ログ・PII は作業用の一時ディレクトリのみ、コミットしない。
 - 外部 LLM API へ会話・作業データを送る場合は ZDR（Zero Data Retention）を必須にし、保証できなければ送信しない。

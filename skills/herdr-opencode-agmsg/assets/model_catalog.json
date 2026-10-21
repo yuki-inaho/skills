@@ -1,0 +1,38 @@
+{
+  "policy_version": 3,
+  "provider_order": ["ollama-cloud", "opencode-go", "openrouter"],
+  "default_variant": "high",
+  "prefer_capabilities": ["1017"],
+  "models": [
+    {
+      "id": "ollama-cloud/deepseek-v4.1-flash:1017",
+      "free": false,
+      "capabilities": ["1017"],
+      "variants": ["high"]
+    },
+    {
+      "id": "ollama-cloud/deepseek-v4.1-flash",
+      "free": false,
+      "capabilities": [],
+      "variants": ["high"]
+    },
+    {
+      "id": "opencode-go/deepseek-v4.1-flash",
+      "free": false,
+      "capabilities": [],
+      "variants": ["high"]
+    },
+    {
+      "id": "openrouter/deepseek/deepseek-v4.1-flash-1017",
+      "free": false,
+      "capabilities": ["1017"],
+      "variants": ["high"]
+    },
+    {
+      "id": "openrouter/deepseek/deepseek-v4.1-flash",
+      "free": false,
+      "capabilities": [],
+      "variants": ["high"]
+    }
+  ]
+}

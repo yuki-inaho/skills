@@ -20,6 +20,7 @@ SKILLS = (
     ROOT / "skills" / "public-repository-privacy-review" / "SKILL.md",
     ROOT / "skills" / "write-evidence-based-adr" / "SKILL.md",
     ROOT / "skills" / "review-measurement-contract" / "SKILL.md",
+    ROOT / "skills" / "herdr-opencode-agmsg" / "SKILL.md",
 )
 
 
@@ -84,8 +85,21 @@ def test_readme_lists_every_public_skill() -> None:
         assert link in readme, f"README の一覧に {skill.parent.name} が無い"
 
 
+def test_readme_catalog_links_each_skill_directory() -> None:
+    """README の一覧が実在するスキルディレクトリを取りこぼさない。"""
+    readme = read(README)
+    for skill in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        link = f"](skills/{skill.parent.name}/SKILL.md)"
+        assert link in readme, f"README の一覧に {skill.parent.name} が無い"
+
+
 def test_changed_public_files_have_no_private_data() -> None:
     scanned = [README, POLICY, *SKILLS, SKILLS[1].parent / "agents" / "openai.yaml"]
+    new_skill = ROOT / "skills" / "herdr-opencode-agmsg"
+    scanned.extend(sorted(new_skill.rglob("*.md")))
+    scanned.extend(sorted(new_skill.rglob("*.py")))
+    scanned.extend(sorted(new_skill.rglob("*.yaml")))
+    scanned.extend(sorted(new_skill.rglob("*.json")))
     scanned.extend(sorted((ROOT / "tests").rglob("*.py")))
     scanned.extend(sorted((ROOT / "tests").rglob("*.md")))
     scanned.extend(sorted((ROOT / "tests" / "fixtures").glob("*.jsonl")))
