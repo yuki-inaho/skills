@@ -1,0 +1,4 @@
+interface:
+  display_name: "トマト学習用アセットPDCA"
+  short_description: "収穫・葉かきの器官と遮蔽を確認し、対応画像を実検証して改善する"
+  default_prompt: "$tomato-sim2real-pdca を使い、主茎と葉柄基部を見られる学習用トマトシーンを改善してください。"

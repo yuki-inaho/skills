@@ -1,0 +1,4 @@
+interface:
+  display_name: "証拠に基づくADR作成・更新"
+  short_description: "設計意図と選択理由をdocs以下へ記録し、変更・検証・未達を追跡する"
+  default_prompt: "$write-evidence-adr を使い、今回の設計判断と検証根拠をdocs以下のADRへ記録してください。"

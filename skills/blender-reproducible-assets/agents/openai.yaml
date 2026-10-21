@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blender再現可能アセット制作"
+  short_description: "空シーンからの制作、実描画、校正画像、再現性と保存物を検証する手順"
+  default_prompt: "$blender-reproducible-assets を使い、参照に沿うモデルを空から作って実画像と再現性を確認してください。"
