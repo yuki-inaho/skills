@@ -1,0 +1,4 @@
+interface:
+  display_name: "Herdr OpenCode agmsg"
+  short_description: "Coordinate visible OpenCode workers with agmsg and bounded provider fallback."
+  default_prompt: "Herdr 上で OpenCode ワーカーを可視化し、agmsg で ACK を取って進めて"

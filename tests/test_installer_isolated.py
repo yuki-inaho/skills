@@ -26,6 +26,7 @@ SKILL_NAMES = (
     "public-repository-privacy-review",
     "write-evidence-based-adr",
     "review-measurement-contract",
+    "herdr-opencode-agmsg",
 )
 
 

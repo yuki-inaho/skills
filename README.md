@@ -35,6 +35,7 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`grill-me`](skills/grill-me/SKILL.md) | 設計木の **frontier を 1 ラウンドで一括**質問（上限は指定数・既定10）。事実は自分で調査し、決定だけを聞く。各問に「なぜ/推奨」 |
 | [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
 | [`supervisor-orchestration`](skills/supervisor-orchestration/SKILL.md) | 監督エージェントの振り分け・検証・統合（Bloom ルーティング、サブエージェント並列、成長ログ） |
+| [`herdr-opencode-agmsg`](skills/herdr-opencode-agmsg/SKILL.md) | ユーザー可視の Herdr ペインで OpenCode ワーカーを統括（agmsg の ACK/READY、編集可能な catalog による provider 順序・free 禁止・限定切替、owned tab の終了条件。純粋な判断ヘルパー同梱） |
 | [`demo-rehearsal`](skills/demo-rehearsal/SKILL.md) | デモの時間設計（説明秒・理解待ち秒）と聴衆エージェント PDCA（汎用ペルソナ付き） |
 | [`playwright-cli-automation`](skills/playwright-cli-automation/SKILL.md) | グローバル playwright-cli でブラウザを自律操作しスクリーンショット収集（コンテナ対処込み） |
 | [`mujoco-web-wasm-demo`](skills/mujoco-web-wasm-demo/SKILL.md) | MuJoCo をブラウザで（公式 WASM + three.js）。フック公開とスクショ検証 |
@@ -42,7 +43,8 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 
 `write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` / `start-with-workdocs` / `start-work-with-docs` /
 `check-finished-workdoc` / `start-work-audit-pattern` / `handover` / `supervisor-orchestration` /
-`demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` / `harness2-portable-workflow` には Codex 等向けの
+`demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` / `harness2-portable-workflow` /
+`herdr-opencode-agmsg` には Codex 等向けの
 `agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
 `check-finished-workdoc` には `references/` にテンプレート / rubric、`start-work-audit-pattern` には `assets/` にプロンプトと役割ファイルを同梱。
 
