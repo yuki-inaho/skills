@@ -24,6 +24,8 @@ SKILL_NAMES = (
     "agent-jsonl-compact-reader",
     "harness2-portable-workflow",
     "public-repository-privacy-review",
+    "write-evidence-based-adr",
+    "review-measurement-contract",
 )
 
 

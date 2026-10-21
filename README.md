@@ -24,6 +24,8 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`harness2-portable-workflow`](skills/harness2-portable-workflow/SKILL.md) | Harness² の Propose–Probe–Compose を、比較条件を固定し選定後の再評価まで含めて監査（合成タスク・証跡重視。出典: https://github.com/yuki-inaho/harness2 / 上流 Google Research, Apache-2.0） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
+| [`write-evidence-based-adr`](skills/write-evidence-based-adr/SKILL.md) | 問題・代替案・観測証跡・実装状況に紐づく ADR を書き、またはレビューする（提案と決着、未検証事項を分離） |
+| [`review-measurement-contract`](skills/review-measurement-contract/SKILL.md) | 実験結果・ベンチマーク・進捗指標が主張する比較を支えるか点検（母集団・分母・設定・版の差、再計算、次の最小確認） |
 | [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き。利用者の指示文をそのまま使う簡易版） |
 | [`start-work-with-docs`](skills/start-work-with-docs/SKILL.md) | 上の詳細版（常用版）。開始時確認、1 項目ずつの対象・完了条件・変更範囲の明示、失敗時は `[ ]` のまま記録、N（既定 40）の変更規則、DoD と成果物実在まで確認する完了判定 |
 | [`check-finished-workdoc`](skills/check-finished-workdoc/SKILL.md) | 完了した workdoc の目的・DoD を実際のリポジトリ状態と照合し、証跡付きの「完了照合・調査分析サマリ」章を追記（テンプレート付き） |

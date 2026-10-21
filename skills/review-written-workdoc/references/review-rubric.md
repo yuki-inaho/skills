@@ -110,6 +110,9 @@ Check:
 - The passing command is concrete, preferably `uv run pytest ...`.
 - Quality gates are explicit: lint, format, type checks, build, or project-specific just targets.
 - Manual verification has expected observations.
+- Data-dependent claims identify a baseline, an evaluation sample/split chosen before tuning, units, denominators, exclusions, and failure/unknown coverage.
+- Accuracy evidence is independent of the model being evaluated. Numerical parity, accepted-point residuals, visual smoothness, and unit-test success are not treated as interchangeable evidence of real-world accuracy.
+- Time-series comparisons measure lag and motion preservation alongside jitter; throughput claims state included stages, warmup, hardware, and offline versus causal execution. Apply these checks only when relevant to the requested task.
 
 Finding triggers:
 
@@ -144,11 +147,14 @@ Check:
 - The definition of done maps to goal analysis and trace IDs.
 - It includes documentation/work record completion when auditability is required.
 - It does not use vague criteria like "properly", "as needed", or "確認する" without expected result.
+- Requested quality/performance outcomes have their own gates. Logging an unmet outcome does not satisfy that gate, and a completed document review does not mark the user outcome achieved.
+- For plan-only requests, planning completion and future execution/outcome gates are separate. Proposed thresholds are labelled as proposals, not agreed user requirements or already measured achievements.
 
 Finding triggers:
 
 - Blocker: No objective completion criteria.
 - Major: Criteria exist but do not cover the stated goal.
+- Major: A checked completion item substitutes execution/reporting for an unmet user-facing quality outcome, or evaluation selects only successful samples.
 - Minor: Criteria are good but not fully mapped to trace IDs.
 
 ## 9. Review Verdict Guidance

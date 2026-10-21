@@ -18,6 +18,8 @@ SKILLS = (
     ROOT / "skills" / "agent-jsonl-compact-reader" / "SKILL.md",
     ROOT / "skills" / "harness2-portable-workflow" / "SKILL.md",
     ROOT / "skills" / "public-repository-privacy-review" / "SKILL.md",
+    ROOT / "skills" / "write-evidence-based-adr" / "SKILL.md",
+    ROOT / "skills" / "review-measurement-contract" / "SKILL.md",
 )
 
 

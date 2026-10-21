@@ -40,6 +40,14 @@ Use `temp/workdoc_<date-token>_<slug>.md`, for example `temp/workdoc_Apr16-2026_
 9. Add a goal requirement analysis section directly under `## 1. 作業目的`. Include the user's intuitive goal, explicit requirements, implicit constraints, subgoal structure, success criteria, non-goals, and traceability IDs.
 10. Tie every phase, task, checklist item, command, and definition-of-done item back to the goal analysis or traceability IDs.
 
+## Outcome And Evidence Boundaries
+
+When a task includes measurable quality, accuracy, stability, or speed, make those user outcomes explicit acceptance items. Working code, saved artifacts, passing unit tests, and a document review do not by themselves establish those outcomes. If a run misses a quality target, retain the unmet item; do not redefine success as merely recording the failure. For a research/plan-only request, distinguish the completed planning deliverable from the still-unexecuted implementation and outcome gates. State which thresholds are user requirements, proposed engineering targets, or measurements, and freeze evaluation conditions before tuning.
+
+For data-dependent experiments, specify the baseline and input/source identity, evaluation split, sample-selection rule, denominator, exclusions, units, and timing scope. Include failure/unknown cases and a control that could disprove the claimed improvement (for example, a constant output can reduce apparent jitter). Use independent observations for accuracy claims; implementation parity and residuals over only accepted correspondences are narrower evidence.
+
+For evolving artifacts, distinguish current results from dated intermediate snapshots. Identify the source/config/input for each result and invalidate only checks affected by a subsequent change. Do not require full reruns for a wording correction when the underlying implementation and artifacts are unchanged.
+
 ## uv And Command Policy
 
 - Use uv commands for Python workflows, for example `uv sync`, `uv run pytest`, `uv run ruff check`, and `uv run python ...`.
