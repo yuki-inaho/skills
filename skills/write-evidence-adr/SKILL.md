@@ -29,6 +29,8 @@ description: Create and maintain evidence-backed design decision records under r
 
 作業書へ判断と次の検証を追記する。文章だけの訂正なら無関係な実験を繰り返さず、形状/契約変更なら影響する証拠を更新する。
 
+提出直前の重大不具合は新しい判断記録にし、発見した見た目、数値による切分け、旧版の採用撤回、修正の不変条件、再検証範囲を結ぶ。旧試験が何を保証し何を検査していなかったかを明記し、過去のPASSを削除したり全面合格へ拡張したりしない。失敗版と修正版のmodel/source/camera hashを保持し、未完了の修正を完了と記さない。
+
 利用者指定の節目で対象差分だけcommitし、許可されたremote/branchへpushし、commitへgit notesを付ける。notesは判断/検証/残課題/証拠に絞る。ローカルnotesとremote refs/notesの保存を別確認する。任意refが接続で扱えない場合は制限と復元可能な保存経路を明記する。Markdown文書をgit notesとして報告しない。
 
 秘密や私有ログを汎用スキルへ埋め込まず個別の私有プロジェクトに置く。
