@@ -1,6 +1,6 @@
 ---
 name: start-work-audit-pattern
-description: Use when the user asks to start or template a plan-driven multi-agent development workflow with a coordinator, worker, and audit agent; when they mention start-work-audit-pattern, 作業監査, 作業エージェント, 監査エージェント, 統括エージェント, workdoc checklist execution, role files under .agents/roles, or step-by-step execution from a workdoc/Plan as the single source of truth. Supports Codex and Claude by bundling reusable prompt and role-file templates.
+description: 'Use when the user asks to start or template a plan-driven multi-agent development workflow with a coordinator, worker, and audit agent; when they mention start-work-audit-pattern, 作業監査, 作業エージェント, 監査エージェント, 統括エージェント, workdoc checklist execution, role files under .agents/roles, or step-by-step execution from a workdoc/Plan as the single source of truth. Supports any agent runtime that can follow a plan or emulate roles with labeled blocks; bundles reusable prompt and role-file templates.'
 ---
 
 # Start Work Audit Pattern
@@ -36,8 +36,8 @@ If role files already exist, read them and preserve local customizations unless 
 
 ## Workflow
 
-1. Identify yourself first: state whether the active agent is Codex, Claude Code, or another runtime.
-2. Read local instructions in this order when present: `AGENTS.md`, `CODEX.md`, `CLAUDE.md`, then referenced files.
+1. Identify yourself first: state which agent runtime you are using and whether it provides real subagents, labeled role emulation, or neither.
+2. Read local instructions in this order when present: `AGENTS.md`, `CODEX.md`, `CLAUDE.md`, `OPENCODE.md`, then referenced files.
 3. Show the workdoc/Plan path before starting. If no path is given, locate the intended workdoc under `temp/` and state the assumption.
 4. Treat the workdoc/Plan as the only source of truth. Do not add scope unless the user updates the Plan.
 5. Confirm the timestamp with:
@@ -72,7 +72,20 @@ Do not spawn extra agents unless the user explicitly expands the roster.
 
 If the runtime has no subagent feature, emulate the roles in separate labeled blocks while preserving the same handoff and audit gates. State that real subagents are unavailable.
 
-For Codex, prefer available multi-agent tools when present. For Claude Code, use its available subagent/task mechanism. Do not invent tool calls that are not available in the current runtime.
+Map the three conceptual roles to whatever the runtime actually provides. Use
+capability-based labels first, then a runtime note:
+
+| Capability label | Typical runtime mechanism | Constraint |
+| --- | --- | --- |
+| read-only explorer / analyst | read-only subagent, search agent, or labeled analysis block | may not write files |
+| executor / writer | implementation subagent, worker task, or labeled implementation block | one writer per file scope |
+| audit / reviewer | independent reviewer or a fresh labeled audit block | must not be the same writer for the same block |
+
+Respect the user's explicit delegation. If the user names a model, platform, agent
+type or roster, use it and do not substitute a preferred default. Do not spawn an
+extra agent for a purpose that already has an owner, and do not let two writers
+edit the same file scope concurrently. Do not invent tool calls that the current
+runtime does not expose.
 
 For OpenCode workers shown in user-visible Herdr panes, use the `herdr-opencode-agmsg` skill when available for the roster, ACK/READY, provider fallback and owned-tab cleanup gates.
 
@@ -90,7 +103,7 @@ When executing an existing workdoc, do not rewrite it wholesale. Only update:
 
 ## Reminder Rule
 
-Maintain an action count. After every 20 actions, print this exact reminder and reset the count:
+Maintain an action count. After every 40 actions, print this exact reminder and reset the count (the user may override N; state the chosen N before starting):
 
 > 「では、作業計画書兼記録書のチェックリストを細かく更新し、作業開始前に必ず date "+%Y-%m-%d %H:%M:%S %Z%z" コマンドで現在時刻を確認し、正確な日時を記録してください。詰まった場合は必要に応じてタスクを細分化して作業を再開し、行動カウントと注意事項を注意した上で作業継続してください。チェックリストがすべて埋まるまで作業を続け、表示後には必ず行動カウントをリセットしてください。行動カウントがリフレッシュされるタイミングでかならず作業記録を更新してください（状況報告）。行動カウントは行動のたびに明示的に出力してください。」
 

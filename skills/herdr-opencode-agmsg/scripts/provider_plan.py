@@ -6,11 +6,16 @@ no network or filesystem writes, reads no environment variables and never
 changes auth, privacy settings or global defaults. Invalid input exits 2
 without echoing the input.
 
-Catalog keys (see ../assets/model_catalog.json):
+Catalog keys (see ../assets/model_catalog.example.json):
   provider_order        ordered provider IDs
-  default_variant       reasoning variant appended as #variant (e.g. "high")
-  prefer_capabilities   capability tags preferred within a provider (e.g. 1017)
+  default_variant       reasoning variant appended as #variant (e.g. "standard")
+  prefer_capabilities   capability tags preferred within a provider
   models                list of {id, free, capabilities, variants}
+
+The bundled ../assets/model_catalog.json is a neutral, empty template. It
+contains no provider or model defaults. Copy the example or pass a private
+catalog with --catalog. An empty catalog stops with reason
+"catalog_unconfigured"; it never falls back to a vendor or model.
 
 Free models are forbidden. A catalog that sets `allow_free_models` to anything
 other than false is rejected, and free entries are always excluded.
@@ -130,8 +135,8 @@ def _catalog(catalog: Any) -> tuple[list[dict[str, Any]], str | None, list[str]]
     if not isinstance(catalog, dict):
         _fail("catalog must be a JSON object")
     models = catalog.get("models")
-    if not isinstance(models, list) or not models:
-        _fail("catalog models must be a non-empty list")
+    if not isinstance(models, list):
+        _fail("catalog models must be a list")
     free_flag = catalog.get("allow_free_models", False)
     if free_flag is not False:
         _fail("free models are forbidden; allow_free_models must be false")
@@ -217,6 +222,32 @@ def plan(request: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any]:
 
     entries, default_variant, prefer_capabilities = _catalog(catalog)
     attempts = _attempts(request)
+    requested_order = request.get("requested_order")
+    if requested_order is not None and (
+        not isinstance(requested_order, list) or not requested_order
+    ):
+        _fail("requested_order must be a non-empty list")
+    discovery_raw = request.get("discovery")
+    if discovery_raw is not None and not isinstance(discovery_raw, list):
+        _fail("discovery must be a list of exact model IDs")
+    if not entries:
+        return {
+            "action": "stop",
+            "candidate": None,
+            "reason": "catalog_unconfigured",
+            "policy": {
+                "free_models_forbidden": True,
+                "required_capabilities": [],
+                "prefer_capabilities": prefer_capabilities,
+                "variant": default_variant,
+            },
+            "classification": [],
+            "excluded": [],
+            "notes": [
+                "catalog has no models; copy assets/model_catalog.example.json "
+                "or pass a private catalog with --catalog"
+            ],
+        }
     excluded: list[dict[str, str]] = []
 
     requested_variant = request.get("variant")
@@ -438,7 +469,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--catalog",
         default=str(DEFAULT_CATALOG),
-        help="editable model catalog JSON (default: bundled assets/model_catalog.json)",
+        help="editable model catalog JSON (default: bundled neutral template; pass a private catalog for real choices)",
     )
     args = parser.parse_args(argv)
 

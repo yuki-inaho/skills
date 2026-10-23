@@ -14,11 +14,11 @@ Create a self-contained Japanese work plan and work record for another agent to 
 
 ## Required Reference
 
-Before writing the workdoc, read `references/workdoc-template.md`. Preserve the template structure and the "作業記録"注意事項 unless the user explicitly asks for a different format.
+Before writing the workdoc, read `references/workdoc-template.md`. Preserve the template structure and the "作業記録"注意事項 unless the user explicitly asks for a different format. Keep the workdoc free of real secrets, private repository names, absolute home paths and customer data; use placeholders or synthetic values.
 
 ## Workflow
 
-1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, and any referenced files. Follow command wrappers such as `rtk` when required.
+1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, `CLAUDE.md`, `OPENCODE.md`, and any referenced files. Follow command wrappers such as `rtk` when required.
 2. Confirm the current timestamp with:
 
 ```bash
@@ -32,7 +32,7 @@ LC_TIME=C date "+%b%d-%Y"
 ```
 
 Use `temp/workdoc_<date-token>_<slug>.md`, for example `temp/workdoc_Apr16-2026_api_refactor.md`. The slug must be short, lowercase, and task-specific.
-4. Determine the working directory and repository name. Prefer `git rev-parse --show-toplevel` when inside a Git repository. If the directory is not a Git repository, do not silently fall back; state that it is not a Git repository in the document and use the current working directory as the explicit working directory.
+4. Determine the working directory and repository name. Prefer `git rev-parse --show-toplevel` when inside a Git repository. If the directory is not a Git repository, do not silently fall back; state that it is not a Git repository in the document and use the current working directory as the explicit working directory. For env files and compose logs, record variable names and redacted excerpts, never secret values.
 5. Inspect the project enough to make the document executable by another agent: repository layout, Docker files such as `Dockerfile`, `docker-compose*.yaml`, `.env` / `example.env`, tests, `justfile`, entry points, and relevant source modules.
 6. Create `temp/` if needed and write the workdoc there.
 7. Fill every placeholder with concrete information. Do not leave bracket placeholders like `[ファイル名]` unless the user explicitly requested a blank template.

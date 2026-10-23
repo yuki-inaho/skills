@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "note": "Coverage manifest, not a fixed skill count. tests/test_skill_coverage.py discovers skills from the tree.",
+  "skills": {
+    "agent-jsonl-compact-reader": {
+      "scenario": "SC-01",
+      "tier": "external-contract",
+      "test": "tests/test_agent_jsonl_contract.py",
+      "proves": "The pinned 0.3.1 CLI contract on synthetic JSONL when the dedicated job installs it.",
+      "does_not_prove": "No 0.2 legacy export run, no real session log, no default local run when the binary is absent."
+    },
+    "check-finished-workdoc": {
+      "scenario": "SC-05",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The bundled completion chapter template has the expected section and status shape.",
+      "does_not_prove": "No live repository completion audit, no claim that a checked box is true."
+    },
+    "demo-rehearsal": {
+      "scenario": "SC-16",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter, links and bundle shape are valid.",
+      "does_not_prove": "No timed rehearsal, screenshot capture, audience agent or PDCA run."
+    },
+    "grill-me": {
+      "scenario": "SC-14",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter, links and the bundled question bank exist.",
+      "does_not_prove": "No interview round, no user confirmation and no research behavior."
+    },
+    "handover": {
+      "scenario": "SC-15",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The output template and final-check section are present and internally linkable.",
+      "does_not_prove": "No generated handover, no placeholder replacement and no privacy decision."
+    },
+    "harness2-portable-workflow": {
+      "scenario": "SC-20",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter and bundle shape are valid.",
+      "does_not_prove": "No Harness2 baseline/candidate run, no receipt, no evaluation."
+    },
+    "herdr-opencode-agmsg": {
+      "scenario": "SC-21",
+      "tier": "helper",
+      "test": "tests/test_herdr_opencode_agmsg.py",
+      "proves": "Pure provider-plan and cleanup decisions on synthetic catalogs and requests.",
+      "does_not_prove": "No live Herdr, OpenCode, provider, agmsg or credential behavior."
+    },
+    "jax-performance-tuning": {
+      "scenario": "SC-19",
+      "tier": "static",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "No missing bundled trace script and no tool-specific absolute cache path remain.",
+      "does_not_prove": "No JAX/GPU run, no cache hit, no profiler trace and no measured speedup."
+    },
+    "mujoco-web-wasm-demo": {
+      "scenario": "SC-18",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter, links and bundle shape are valid.",
+      "does_not_prove": "No browser, WebGL, MJCF loading or screenshot run."
+    },
+    "playwright-cli-automation": {
+      "scenario": "SC-17",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter, links and bundle shape are valid.",
+      "does_not_prove": "No browser automation, console capture or screenshot comparison."
+    },
+    "public-repository-privacy-review": {
+      "scenario": "SC-12",
+      "tier": "static",
+      "test": "tests/test_privacy_scan.py",
+      "proves": "The repository scan classifies synthetic canaries, never echoes values, and refuses non-Git roots and escaping symlinks instead of widening scope.",
+      "does_not_prove": "No human publication review and no guarantee that a zero hit is safe."
+    },
+    "review-measurement-contract": {
+      "scenario": "SC-11",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter and bundle shape are valid.",
+      "does_not_prove": "No benchmark review, denominator recomputation or decision."
+    },
+    "review-written-workdoc": {
+      "scenario": "SC-04",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The bundled review rubric keeps its numbered section shape.",
+      "does_not_prove": "No workdoc review, no edit application and no verdict."
+    },
+    "skill-creator": {
+      "scenario": "SC-13",
+      "tier": "helper",
+      "test": "tests/test_skill_creator_validator.py",
+      "proves": "Strict YAML, duplicate-key, non-mapping and name/description failures are real and tested.",
+      "does_not_prove": "No agent loader registration and no authoring session."
+    },
+    "start-with-workdocs": {
+      "scenario": "SC-06",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The completion command is documented with its zero-count exit behavior.",
+      "does_not_prove": "No checklist execution and no work-record update."
+    },
+    "start-work-audit-pattern": {
+      "scenario": "SC-08",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "Role files and the audit prompt template are present and runtime-neutral.",
+      "does_not_prove": "No coordinator/worker/auditor run and no audit acceptance."
+    },
+    "start-work-with-docs": {
+      "scenario": "SC-07",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "Frontmatter and bundle shape are valid; no execution is claimed.",
+      "does_not_prove": "No sequential workdoc execution, no DoD artifact and no failed-step handling."
+    },
+    "supervisor-orchestration": {
+      "scenario": "SC-09",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The routing reference uses capability labels and a runtime mapping note.",
+      "does_not_prove": "No subagent routing, no artifact verification and no integration."
+    },
+    "write-evidence-based-adr": {
+      "scenario": "SC-10",
+      "tier": "static",
+      "test": "tests/test_public_contract.py",
+      "proves": "Frontmatter and bundle shape are valid.",
+      "does_not_prove": "No ADR writing session and no evidence adjudication."
+    },
+    "write-workdoc-docker": {
+      "scenario": "SC-03",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The Docker workdoc template keeps its sections and four-line checklist shape.",
+      "does_not_prove": "No Docker build or runtime check, and no generated workdoc."
+    },
+    "write-workdoc-uv": {
+      "scenario": "SC-02",
+      "tier": "artifact",
+      "test": "tests/test_skill_artifacts.py",
+      "proves": "The uv workdoc template keeps its sections and four-line checklist shape.",
+      "does_not_prove": "No uv project run and no generated workdoc."
+    }
+  }
+}

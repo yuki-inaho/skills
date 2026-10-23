@@ -2,7 +2,7 @@
 
 実 provider・実 Herdr・実 agmsg は呼ばない。catalog の許可集合（free 禁止・
 unlisted 除外・capability 必須・variant 分離）、registry の base ID と
-`#variant` 呼び出しの正規化、provider 順序と 1017 優先、quota での乗り換え、
+`#variant` 呼び出しの正規化、provider 順序と capability 優先、quota での乗り換え、
 bounded retry、認証エラー停止、code failure の同一モデル修正、live job の
 reconcile、owned tab の close 条件を確認する。CLI が入力を変更せず、未知
 フィールドや秘密様の値を出力しないことも確認する。
@@ -29,7 +29,7 @@ DISCOVERY_FIXTURE = ROOT / "tests" / "fixtures" / "synthetic_opencode_models.txt
 A_BASE = "example-cloud/model-a"
 A2_BASE = "example-cloud/model-b"
 B_BASE = "example-go/model-a"
-C_BASE = "example-openrouter/model-a-1017"
+C_BASE = "example-openrouter/model-a-strong"
 F_BASE = "example-cloud/model-a:free"
 A = f"{A_BASE}#high"
 A2 = f"{A2_BASE}#high"
@@ -54,11 +54,11 @@ CATALOG: dict[str, object] = {
     "provider_order": ["example-cloud", "example-go", "example-openrouter"],
     "allow_free_models": False,
     "default_variant": "high",
-    "prefer_capabilities": ["1017"],
+    "prefer_capabilities": ["cap-example"],
     "models": [
         {"id": A_BASE, "free": False, "capabilities": [], "variants": ["high"]},
         {"id": B_BASE, "free": False, "capabilities": [], "variants": ["high"]},
-        {"id": C_BASE, "free": False, "capabilities": ["1017"], "variants": ["high"]},
+        {"id": C_BASE, "free": False, "capabilities": ["cap-example"], "variants": ["high"]},
     ],
 }
 DISCOVERY = [A_BASE, B_BASE, C_BASE]
@@ -89,30 +89,29 @@ def _multi_model_catalog() -> dict[str, object]:
             {"id": A_BASE, "free": False, "capabilities": [], "variants": ["high"]},
             {"id": A2_BASE, "free": False, "capabilities": [], "variants": ["high"]},
             {"id": B_BASE, "free": False, "capabilities": [], "variants": ["high"]},
-            {"id": C_BASE, "free": False, "capabilities": ["1017"], "variants": ["high"]},
+            {"id": C_BASE, "free": False, "capabilities": ["cap-example"], "variants": ["high"]},
         ],
     }
-
-
-def _fixture_ids() -> list[str]:
-    lines = DISCOVERY_FIXTURE.read_text(encoding="utf-8").splitlines()
-    return [line.strip() for line in lines if line.strip() and not line.startswith("#")]
 
 
 # ---- catalog policy -------------------------------------------------------
 
 
-def test_bundled_catalog_is_non_free_and_variant_aware() -> None:
+def test_bundled_catalog_is_neutral_and_empty() -> None:
     catalog = json.loads(DEFAULT_CATALOG.read_text(encoding="utf-8"))
     assert "allow_free_models" not in catalog
-    assert catalog["provider_order"][0] == "ollama-cloud"
-    assert catalog["default_variant"] == "high"
-    assert "1017" in catalog["prefer_capabilities"]
-    for entry in catalog["models"]:
-        assert "#" not in entry["id"]
-        assert "high" in entry["variants"]
-        assert entry["free"] is False
-        assert ":free" not in entry["id"] and "-free" not in entry["id"]
+    assert catalog["provider_order"] == []
+    assert catalog["models"] == []
+
+
+def test_provider_fixture_uses_synthetic_ids_only() -> None:
+    ids = [
+        line.strip()
+        for line in DISCOVERY_FIXTURE.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.startswith("#")
+    ]
+    assert ids
+    assert all(item.startswith("example-") for item in ids)
 
 
 def test_registry_base_ids_are_normalized_to_high_invocations() -> None:
@@ -122,34 +121,25 @@ def test_registry_base_ids_are_normalized_to_high_invocations() -> None:
     assert decision["classification"][0]["variant"] == "high"
 
 
-def test_realistic_registry_listing_prefers_1017_within_provider() -> None:
-    catalog = json.loads(DEFAULT_CATALOG.read_text(encoding="utf-8"))
-    ids = _fixture_ids()
-    assert "ollama-cloud/deepseek-v4.1-flash:1017" in ids
-    decision = provider_plan.plan({"discovery": ids, "attempts": []}, catalog)
+def test_discovery_with_variant_suffix_is_normalized() -> None:
+    decision = provider_plan.plan(_request(discovery=[f"{A_BASE}#high"]), CATALOG)
     assert decision["action"] == "launch"
-    assert decision["candidate"] == "ollama-cloud/deepseek-v4.1-flash:1017#high"
+    assert decision["candidate"] == A
 
 
-def test_plain_model_is_used_when_1017_is_not_discovered() -> None:
-    catalog = json.loads(DEFAULT_CATALOG.read_text(encoding="utf-8"))
-    ids = [
-        "ollama-cloud/deepseek-v4.1-flash",
-        "opencode-go/deepseek-v4.1-flash",
-        "openrouter/deepseek/deepseek-v4.1-flash",
-    ]
-    decision = provider_plan.plan({"discovery": ids, "attempts": []}, catalog)
-    assert decision["candidate"] == "ollama-cloud/deepseek-v4.1-flash#high"
+def test_plain_model_is_used_when_preferred_capability_is_not_discovered() -> None:
+    decision = provider_plan.plan(_request(discovery=[A_BASE, B_BASE]), CATALOG)
+    assert decision["candidate"] == A
 
 
 def test_prefer_capability_reorders_even_if_catalog_lists_plain_first() -> None:
-    preferred_base = "example-cloud/model-a-1017"
+    preferred_base = "example-cloud/model-a-cap-example"
     catalog = {
         **CATALOG,
         "provider_order": ["example-cloud"],
         "models": [
             {"id": A_BASE, "free": False, "capabilities": [], "variants": ["high"]},
-            {"id": preferred_base, "free": False, "capabilities": ["1017"], "variants": ["high"]},
+            {"id": preferred_base, "free": False, "capabilities": ["cap-example"], "variants": ["high"]},
         ],
     }
     decision = provider_plan.plan(_request(discovery=[A_BASE, preferred_base]), catalog)
@@ -265,8 +255,8 @@ def test_variant_override_is_not_silently_substituted() -> None:
 
 
 def test_missing_required_capability_stops_without_substitution() -> None:
-    # C (the only 1017 model) exists in the catalog but is not discovered.
-    decision = provider_plan.plan(_request(discovery=[A_BASE, B_BASE], required_capabilities=["1017"]), CATALOG)
+    # C (the only cap-example model) exists in the catalog but is not discovered.
+    decision = provider_plan.plan(_request(discovery=[A_BASE, B_BASE], required_capabilities=["cap-example"]), CATALOG)
     assert decision["action"] == "stop"
     assert decision["reason"] == "required_capability_missing"
     assert decision["candidate"] is None
@@ -275,7 +265,7 @@ def test_missing_required_capability_stops_without_substitution() -> None:
 
 def test_required_capability_selects_the_capable_model() -> None:
     decision = provider_plan.plan(
-        _request(discovery=[A_BASE, B_BASE, C_BASE], required_capabilities=["1017"]), CATALOG
+        _request(discovery=[A_BASE, B_BASE, C_BASE], required_capabilities=["cap-example"]), CATALOG
     )
     assert decision["action"] == "launch"
     assert decision["candidate"] == C
@@ -605,12 +595,13 @@ def test_cli_does_not_print_unknown_fields_or_secrets(tmp_path: Path) -> None:
     assert "api_key" not in result.stdout
 
 
-def test_cli_uses_bundled_catalog_with_realistic_discovery(tmp_path: Path) -> None:
-    result = _run(PROVIDER, {"discovery": _fixture_ids(), "attempts": []}, tmp_path)
+def test_cli_refuses_neutral_empty_catalog(tmp_path: Path) -> None:
+    result = _run(PROVIDER, {"discovery": [A_BASE], "attempts": []}, tmp_path)
     assert result.returncode == 0, result.stderr
     decision = json.loads(result.stdout)
-    assert decision["action"] == "launch"
-    assert decision["candidate"] == "ollama-cloud/deepseek-v4.1-flash:1017#high"
+    assert decision["action"] == "stop"
+    assert decision["reason"] == "catalog_unconfigured"
+    assert decision["candidate"] is None
 
 
 def test_cli_accepts_an_edited_catalog(tmp_path: Path) -> None:

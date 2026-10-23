@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "family": "specialists",
+  "cases": [
+    {
+      "id": "agent-jsonl-compact-reader--positive",
+      "skill": "agent-jsonl-compact-reader",
+      "facts_and_request": "CLI version meets the required contract and byte-position references are available. User requests tool-call evidence from a synthetic log."
+    },
+    {
+      "id": "agent-jsonl-compact-reader--boundary",
+      "skill": "agent-jsonl-compact-reader",
+      "facts_and_request": "Search finds zero message hits, but the requested text may be in tool output and that scope has not been searched."
+    },
+    {
+      "id": "review-measurement-contract--positive",
+      "skill": "review-measurement-contract",
+      "facts_and_request": "The requested evidence review has actually recomputed matched rates from raw counts and checked equal source/settings, denominators, timing scope and included failures. All requested review criteria are satisfied and the supported comparison has been recorded for the user in chat; user asks whether this review is complete."
+    },
+    {
+      "id": "review-measurement-contract--boundary",
+      "skill": "review-measurement-contract",
+      "facts_and_request": "Two reported best numbers use different denominators and excluded failure populations; user asks whether improvement is proved."
+    },
+    {
+      "id": "jax-performance-tuning--positive",
+      "skill": "jax-performance-tuning",
+      "facts_and_request": "User authorizes profiling a fixed-shape CPU program; JAX exists, timing uses block_until_ready, cache directory is explicit. GPU claims are excluded."
+    },
+    {
+      "id": "jax-performance-tuning--boundary",
+      "skill": "jax-performance-tuning",
+      "facts_and_request": "GPU optimization is requested but no accelerator or trace evidence exists and the suggested analyzer script is missing."
+    },
+    {
+      "id": "grill-me--positive",
+      "skill": "grill-me",
+      "facts_and_request": "Two decision nodes are on the settled dependency frontier; recommendations are supported; user asks one question round."
+    },
+    {
+      "id": "grill-me--boundary",
+      "skill": "grill-me",
+      "facts_and_request": "A proposed question is a repository fact already available for direct inspection, not a user preference."
+    },
+    {
+      "id": "demo-rehearsal--positive",
+      "skill": "demo-rehearsal",
+      "facts_and_request": "The requested rehearsal has actually completed in one round. Timing is within the declared window, every audience persona score is at least 4/5, actual screenshots show distinct verified states and all declared rehearsal criteria are met. User asks whether this rehearsal is complete."
+    },
+    {
+      "id": "demo-rehearsal--boundary",
+      "skill": "demo-rehearsal",
+      "facts_and_request": "Screenshot files differ in size but show the same frozen state; no actual state transition is verified."
+    },
+    {
+      "id": "playwright-cli-automation--positive",
+      "skill": "playwright-cli-automation",
+      "facts_and_request": "Authorized local page exposes readiness and operation hooks; browser CLI is available; user asks to exercise and capture it."
+    },
+    {
+      "id": "playwright-cli-automation--boundary",
+      "skill": "playwright-cli-automation",
+      "facts_and_request": "A click returns success but DOM and screenshot show no transition; the requested action remains unverified."
+    },
+    {
+      "id": "mujoco-web-wasm-demo--positive",
+      "skill": "mujoco-web-wasm-demo",
+      "facts_and_request": "A local synthetic one-body scene exposes ready/status/redraw hooks and known coordinate expectations; user authorizes stepping it."
+    },
+    {
+      "id": "mujoco-web-wasm-demo--boundary",
+      "skill": "mujoco-web-wasm-demo",
+      "facts_and_request": "A screenshot exists, but redraw has not occurred and known forward-kinematics coordinates disagree with the shown body."
+    }
+  ],
+  "answer_schema": {
+    "cases": [
+      {
+        "id": "copy exact case id",
+        "decision": "proceed|inspect|ask|stop|keep_base",
+        "output_target": "repo|chat|none",
+        "completion": "complete|incomplete",
+        "rationale": "brief evidence and next concrete action; do not invent execution"
+      }
+    ]
+  },
+  "instruction": "Answer the requested workflow decision from facts and the supplied skills. output_target is the destination of the requested written deliverable or immediate record (repo/chat), or none when no written deliverable is requested; it is not a ban on transient tool state. completion refers to the requested current task/outcome, not mere ability to attempt it. Do not treat provided facts as proof of unstated execution. Use the same case id and all cases, no skipped failures. completion means the current facts already establish the requested outcome; ability, intention, or your proposed next action never establishes completion. stop blocks the requested side effect pending repair; inspect gathers missing evidence without performing that side effect."
+}

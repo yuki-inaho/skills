@@ -1,7 +1,7 @@
 # Synthetic `opencode models` style listing (registry base IDs, one per line).
 # Not a real provider inventory.
-ollama-cloud/deepseek-v4.1-flash:1017
-ollama-cloud/deepseek-v4.1-flash
-opencode-go/deepseek-v4.1-flash
-openrouter/deepseek/deepseek-v4.1-flash-1017
-openrouter/deepseek/deepseek-v4.1-flash
+example-cloud/model-a
+example-cloud/model-a-cap-example
+example-go/model-a
+example-openrouter/model-a-cap-example
+example-openrouter/model-a

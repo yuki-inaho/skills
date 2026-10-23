@@ -44,6 +44,9 @@ Read when using Herdr panes or deciding whether an owned tab may be closed.
   attempt's status.
 - Record the roster from real values: role, pane, native session, actual process
   ID, start time, model, write scope and evidence path.
+- Keep the dispatch pane free and separate from worker tabs. Never type into a
+  controller pane while it is busy; use the free dispatch pane or wait. A pane
+  label alone does not prove which agent is listening.
 
 ## Jobs and receipts
 

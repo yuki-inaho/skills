@@ -1,20 +1,34 @@
 #!/usr/bin/env python3
-"""Minimal dependency-free validator for SKILL.md files.
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["PyYAML>=6,<7"]
+# ///
+"""Strict frontmatter validator for SKILL.md files.
 
-Checks (hard errors -> exit 1):
+The validator uses a real YAML safe parser. It rejects duplicate mapping keys and
+non-mapping frontmatter instead of treating the fields as opaque regex captures.
+Recommended headings are advisory: a skill may use equivalent operational
+headings and still pass.
+
+Hard errors (exit 1):
   - SKILL.md exists and starts with a frontmatter block delimited by '---'
-  - frontmatter has non-empty 'name' and 'description'
-  - 'name' equals the containing directory name
+  - the frontmatter is a YAML mapping
+  - mapping keys are unique
+  - 'name' is a non-empty kebab-case string equal to the directory name
+  - 'description' is a non-empty string
 
-Warnings (exit still 0):
+Advisory warnings (exit still 0):
   - description does not contain 'Use when'
-  - missing recommended sections (When to use / Prerequisites / Procedure /
-    Verification / Failure handling / Growth log)
+  - recommended sections are absent (equivalent content is allowed)
   - no fenced code block
 
 Usage:
-  python3 validate_skill.py [path ...]
-  # defaults to the 'skills' directory next to the repository root that contains this script
+  uv run validate_skill.py [path ...]
+  # defaults to the 'skills' directory of the repository that contains this script
+
+PyYAML is declared in the repository's pyproject dev group. The PEP 723 block
+lets a single copied script run with `uv run validate_skill.py`, without adding
+a repository-local virtual environment.
 """
 
 from __future__ import annotations
@@ -22,6 +36,9 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+from typing import Any
+
+import yaml
 
 RECOMMENDED_SECTIONS = (
     "## When to use",
@@ -31,29 +48,66 @@ RECOMMENDED_SECTIONS = (
     "## Failure handling",
     "## Growth log",
 )
-FRONTMATTER_FIELD = re.compile(r"^(name|description):\s*(.+)$", re.MULTILINE)
+KEBAB_CASE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
-def _unquote(value: str) -> str:
-    value = value.strip()
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
-        inner = value[1:-1]
-        return inner.replace("''", "'").replace('\\"', '"') if value[0] == "'" else inner
-    return value
+class FrontmatterError(ValueError):
+    """Raised when the frontmatter cannot be parsed as a strict YAML mapping."""
 
 
-def parse_frontmatter(text: str) -> dict[str, str] | None:
-    if not text.startswith("---\n"):
+class _UniqueKeySafeLoader(yaml.SafeLoader):
+    """Safe loader that refuses duplicate mapping keys."""
+
+
+def _construct_unique_mapping(
+    loader: _UniqueKeySafeLoader, node: yaml.MappingNode, deep: bool = False
+) -> dict[Any, Any]:
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if key in mapping:
+            raise yaml.constructor.ConstructorError(
+                None,
+                None,
+                f"duplicate frontmatter key {key!r}",
+                key_node.start_mark,
+            )
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_UniqueKeySafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    _construct_unique_mapping,
+)
+
+
+def split_frontmatter(text: str) -> str | None:
+    """Return the YAML block, or None when the delimiters are absent."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
         return None
-    end = text.find("\n---", 4)
-    if end == -1:
-        return None
-    block = text[4:end]
-    fields: dict[str, str] = {}
-    # only single-line name/description are supported (quote multi-line values instead)
-    for match in FRONTMATTER_FIELD.finditer(block):
-        fields[match.group(1)] = _unquote(match.group(2))
-    return fields
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            return "\n".join(lines[1:index])
+    return None
+
+
+def parse_frontmatter(text: str) -> dict[str, Any]:
+    """Parse frontmatter strictly. Raises FrontmatterError on any defect."""
+    block = split_frontmatter(text)
+    if block is None:
+        raise FrontmatterError("missing or malformed frontmatter block")
+    try:
+        data = yaml.load(block, Loader=_UniqueKeySafeLoader)
+    except yaml.YAMLError as error:
+        problem = getattr(error, "problem", None) or error.__class__.__name__
+        mark = getattr(error, "problem_mark", None)
+        location = f" (line {mark.line + 2}, column {mark.column + 1})" if mark else ""
+        raise FrontmatterError(f"invalid YAML{location}: {problem}") from error
+    if not isinstance(data, dict):
+        raise FrontmatterError("frontmatter must be a YAML mapping")
+    return data
 
 
 def validate(path: Path) -> tuple[list[str], list[str]]:
@@ -63,23 +117,35 @@ def validate(path: Path) -> tuple[list[str], list[str]]:
     directory = skill_md.parent
     if not skill_md.is_file():
         return [f"{skill_md}: not found"], warnings
+
     text = skill_md.read_text(encoding="utf-8")
-    fields = parse_frontmatter(text)
-    if fields is None:
-        return [f"{skill_md}: missing or malformed frontmatter block"], warnings
-    name = fields.get("name", "")
-    description = fields.get("description", "")
-    if not name:
-        errors.append(f"{skill_md}: 'name' is required")
-    elif name != directory.name:
-        errors.append(f"{skill_md}: 'name' ({name!r}) must equal directory name ({directory.name!r})")
-    if not description:
-        errors.append(f"{skill_md}: 'description' is required")
+    try:
+        fields = parse_frontmatter(text)
+    except FrontmatterError as error:
+        return [f"{skill_md}: {error}"], warnings
+
+    name = fields.get("name")
+    description = fields.get("description")
+    if not isinstance(name, str) or not name:
+        errors.append(f"{skill_md}: 'name' is required and must be a string")
+    else:
+        if not KEBAB_CASE.fullmatch(name):
+            errors.append(f"{skill_md}: 'name' must be kebab-case")
+        if name != directory.name:
+            errors.append(
+                f"{skill_md}: 'name' ({name!r}) must equal directory name ({directory.name!r})"
+            )
+    if not isinstance(description, str) or not description.strip():
+        errors.append(f"{skill_md}: 'description' is required and must be a non-empty string")
     elif "Use when" not in description:
         warnings.append(f"{skill_md}: description should contain 'Use when ...'")
-    for section in RECOMMENDED_SECTIONS:
-        if f"\n{section}\n" not in text:
-            warnings.append(f"{skill_md}: missing recommended section {section!r}")
+
+    missing = [section for section in RECOMMENDED_SECTIONS if f"\n{section}\n" not in text]
+    if missing:
+        warnings.append(
+            f"{skill_md}: missing recommended headings {missing!r}; "
+            "equivalent operational content is acceptable"
+        )
     if "```" not in text:
         warnings.append(f"{skill_md}: no fenced code block")
     return errors, warnings

@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "family": "workdocs",
+  "cases": [
+    {
+      "id": "write-workdoc-uv--positive",
+      "skill": "write-workdoc-uv",
+      "facts_and_request": "A uv project, lock, and just test target exist. User asks only to create an executable plan; no implementation has run."
+    },
+    {
+      "id": "write-workdoc-uv--boundary",
+      "skill": "write-workdoc-uv",
+      "facts_and_request": "User asks whether a claimed implementation is complete. The workdoc says tests passed but no command output or required artifact exists. The only permitted edit is correction of the workdoc record."
+    },
+    {
+      "id": "write-workdoc-docker--positive",
+      "skill": "write-workdoc-docker",
+      "facts_and_request": "Compose project/service/volume are explicit. User asks for a workdoc; daemon is unavailable and runtime verification has not run."
+    },
+    {
+      "id": "write-workdoc-docker--boundary",
+      "skill": "write-workdoc-docker",
+      "facts_and_request": "The proposed setup substitutes host execution for a required unavailable container service without user direction."
+    },
+    {
+      "id": "review-written-workdoc--positive",
+      "skill": "review-written-workdoc",
+      "facts_and_request": "User requests review-and-fix; a vague checklist has an unambiguous safe correction supported by the repository."
+    },
+    {
+      "id": "review-written-workdoc--boundary",
+      "skill": "review-written-workdoc",
+      "facts_and_request": "User explicitly requests review-only; the same vague checklist is present."
+    },
+    {
+      "id": "start-with-workdocs--positive",
+      "skill": "start-with-workdocs",
+      "facts_and_request": "Next checklist item ran successfully and its artifact was verified; later DoD items remain unchecked."
+    },
+    {
+      "id": "start-with-workdocs--boundary",
+      "skill": "start-with-workdocs",
+      "facts_and_request": "Next item fails due to a missing dependency; no authorized substitute exists."
+    },
+    {
+      "id": "start-work-with-docs--positive",
+      "skill": "start-work-with-docs",
+      "facts_and_request": "All actions and DoD artifacts are verified; records and actual diff match; pre-existing user edits are preserved."
+    },
+    {
+      "id": "start-work-with-docs--boundary",
+      "skill": "start-work-with-docs",
+      "facts_and_request": "Every checkbox is ticked but the required final artifact does not exist."
+    },
+    {
+      "id": "check-finished-workdoc--positive",
+      "skill": "check-finished-workdoc",
+      "facts_and_request": "The requested completion audit has actual commands, outputs, source identities and all required artifacts matching DoD."
+    },
+    {
+      "id": "check-finished-workdoc--boundary",
+      "skill": "check-finished-workdoc",
+      "facts_and_request": "A checked DoD item is supported only by a manifest listing an artifact; the artifact is absent."
+    },
+    {
+      "id": "write-evidence-based-adr--positive",
+      "skill": "write-evidence-based-adr",
+      "facts_and_request": "Evidence and alternatives including keep-current exist. User asks to draft the ADR; implementation is only an interface."
+    },
+    {
+      "id": "write-evidence-based-adr--boundary",
+      "skill": "write-evidence-based-adr",
+      "facts_and_request": "A proposal is described as accepted but neither a stakeholder decision nor implementation evidence exists."
+    }
+  ],
+  "answer_schema": {
+    "cases": [
+      {
+        "id": "copy exact case id",
+        "decision": "proceed|inspect|ask|stop|keep_base",
+        "output_target": "repo|chat|none",
+        "completion": "complete|incomplete",
+        "rationale": "brief evidence and next concrete action; do not invent execution"
+      }
+    ]
+  },
+  "instruction": "Answer the requested workflow decision from facts and the supplied skills. output_target is the destination of the requested written deliverable or immediate record (repo/chat), or none when no written deliverable is requested; it is not a ban on transient tool state. completion refers to the requested current task/outcome, not mere ability to attempt it. Do not treat provided facts as proof of unstated execution. Use the same case id and all cases, no skipped failures. completion means the current facts already establish the requested outcome; ability, intention, or your proposed next action never establishes completion. stop blocks the requested side effect pending repair; inspect gathers missing evidence without performing that side effect."
+}

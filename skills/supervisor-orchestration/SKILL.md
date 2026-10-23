@@ -1,6 +1,6 @@
 ---
 name: supervisor-orchestration
-description: Use when acting as a supervisor (lead) agent that routes work to subagents, verifies their artifacts, and integrates results. Triggers: 監督エージェント, サブエージェントをばらまく, 並列エージェント監督, タスク振り分け, delegate to subagents, supervise parallel agents.
+description: 'Use when acting as a supervisor (lead) agent that routes work to subagents, verifies their artifacts, and integrates results. Triggers: 監督エージェント, サブエージェントをばらまく, 並列エージェント監督, タスク振り分け, delegate to subagents, supervise parallel agents.'
 ---
 
 # Supervisor Orchestration
@@ -18,14 +18,19 @@ description: Use when acting as a supervisor (lead) agent that routes work to su
 
 ## ルーティング: 「手順書がある仕事か？」
 
-| レベル | 認知活動 | 例 | 振り分け先 |
+| レベル | 認知活動 | 例 | 振り分け先（能力ラベル） |
 | :--- | :--- | :--- | :--- |
-| L1 Remember | 検索・列挙 | ファイル探し、grep | explore |
-| L2 Understand | 要約・説明 | 「このコードを説明」 | explore |
-| L3 Apply | 手順に沿って作る | 規約に沿った修正、テスト追加 | general（実行係） |
+| L1 Remember | 検索・列挙 | ファイル探し、grep | 読み取り専用エクスプローラ |
+| L2 Understand | 要約・説明 | 「このコードを説明」 | 読み取り専用エクスプローラ |
+| L3 Apply | 手順に沿って作る | 規約に沿った修正、テスト追加 | 実行係（単一ライター） |
 | L4 Analyze | 構造調査・原因究明 | 「なぜこのバグが起きた？」 | 思考係 or 監督 |
 | L5 Evaluate | 比較・判断 | 「A と B どちらが妥当？」 | 思考係 + 監督が裁定 |
 | L6 Create | 設計・新規作成 | アーキテクチャ設計 | 思考係、統合は監督 |
+
+能力ラベルを先に決め、実行基盤ごとの名前は利用環境で対応付ける（例: 読み取り専用
+explorer、実装 general/worker、独立 reviewer/auditor）。利用者がモデル・
+プラットフォーム・エージェント名を明示した場合はそれに従い、既定へ読み替えない。
+同一ファイル範囲に複数の書き込み役割を同時に置かない。
 
 詳細例は [references/bloom-routing.md](references/bloom-routing.md)。
 

@@ -1,6 +1,6 @@
 ---
 name: mujoco-web-wasm-demo
-description: Use when building a browser demo of a MuJoCo model (WASM forward kinematics + three.js rendering), embedding playback poses, exposing automation hooks, and capturing screenshots with playwright-cli. Triggers: MuJoCo ブラウザ, mujoco wasm, three.js で mujoco, Web デモ スクリーンショット.
+description: 'Use when building a browser demo of a MuJoCo model (WASM forward kinematics + three.js rendering), embedding playback poses, exposing automation hooks, and capturing screenshots with playwright-cli. Triggers: MuJoCo ブラウザ, mujoco wasm, three.js で mujoco, Web デモ スクリーンショット.'
 ---
 
 # MuJoCo Web (WASM) Demo
@@ -51,8 +51,9 @@ window.__appReady = true;
 ## Verification
 
 - `window.__appReady === true`、`__status()` に `nq` と body 名一覧、フレーム数が出る。
-- 複数ビューのスクリーンショットが**互いに異なる**（サイズ多様性）。同一ならフックが描画を更新していない。
+- 複数ビューのスクリーンショットが**互いに異なる**（内容ハッシュ + ピクセル差分または `__status()` のフレーム/カメラ状態で確認。サイズは前処理のみ）。同一ならフックが描画を更新していない。
 - 目視: リンクが連結して見え、関節を動かすと形が変わる。
+- モデル・ポーズ・スクリーンショットを公開する場合は、実ロボット名・実データ・個人情報を含めない（必要なら一般化または省略する）。
 
 ## Failure handling
 

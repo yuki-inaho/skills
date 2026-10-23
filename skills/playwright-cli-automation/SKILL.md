@@ -1,6 +1,6 @@
 ---
 name: playwright-cli-automation
-description: Use when driving a browser autonomously with the global playwright-cli (open, eval, snapshot, screenshot, close), when collecting screenshots of a local page, or when the CLI fails in containers/scripts. Triggers: playwright-cli で操作, ブラウザを自動操作, スクリーンショット収集, playwright cli 動かない.
+description: 'Use when driving a browser autonomously with the global playwright-cli (open, eval, snapshot, screenshot, close), when collecting screenshots of a local page, or when the CLI fails in containers/scripts. Triggers: playwright-cli で操作, ブラウザを自動操作, スクリーンショット収集, playwright cli 動かない.'
 ---
 
 # Playwright CLI Automation
@@ -45,15 +45,17 @@ PLAYWRIGHT_MCP_SANDBOX=0 $PW -s=mysession close
 
 ## Verification
 
-- スクリーンショットが仕様枚数あり、**互いに異なる**（サイズ集合の多様性で機械確認）。
+- スクリーンショットが仕様枚数あり、**互いに異なる**（内容ハッシュ + ピクセル差分または既知の DOM/view state で機械確認。サイズは高速な前処理のみ）。
 - 重要ページは `.playwright-cli/console-*.log` を確認し、致命的エラーが無いこと（favicon 404 等は無害と切り分ける）。
+- スクリーンショット・console log を公開する場合は、実 URL・トークン・個人情報を含めない（必要なら一般化または省略する）。
 
 ```bash
 python3 - <<'PY'
-import glob, os
+import glob, hashlib, os
 shots = sorted(glob.glob("out/*.png"))
-assert shots and len({os.path.getsize(p) for p in shots}) == len(shots), shots
-print("distinct screenshots:", len(shots))
+hashes = {hashlib.sha256(open(p, "rb").read()).hexdigest() for p in shots}
+assert shots and len(hashes) == len(shots), shots
+print("distinct screenshots by content hash:", len(hashes))
 PY
 ```
 

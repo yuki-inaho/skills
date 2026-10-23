@@ -39,14 +39,17 @@ description: 'Use when creating or updating an agent skill (SKILL.md), fixing fr
 ## Growth log         # 使用記録の追記先
 ```
 
+これらは**推奨**であり、見出し名を固定する hard style ではない。同等の運用内容が
+別の見出しで明確に書かれていればよい（validator は警告のみで、hard error にしない）。
+
 4. 本文に書くこと / 書かないこと:
    - 書く: 非自明な落とし穴、検証コマンドと期待値、失敗時の切り分け、スコープ境界。
    - 書かない: 一般論、重複した方針、未確認の推測、**秘密情報・社内固有のパスや名称**（公開前に必ず除去）。
-5. 検証する（同梱の依存ゼロ検証器）:
+5. 検証する（同梱の strict YAML 検証器。PyYAML は `pyproject.toml` の dev 依存で、PEP 723 により単体コピーでも `uv run` で実行できる）:
 
 ```bash
-python3 skills/skill-creator/scripts/validate_skill.py            # 既定: 同コレクションの skills/
-python3 skills/skill-creator/scripts/validate_skill.py skills/handover
+uv run skills/skill-creator/scripts/validate_skill.py            # 既定: 同コレクションの skills/
+uv run skills/skill-creator/scripts/validate_skill.py skills/handover
 ```
 
 6. 使ったら `references/growth-log.md` に「日付 / 何をした / 学び / 昇格判断」を追記。
@@ -54,13 +57,13 @@ python3 skills/skill-creator/scripts/validate_skill.py skills/handover
 
 ## Verification
 
-- `validate_skill.py` が hard error 0 で終了（警告は内容を確認して取捨）。
+- `validate_skill.py` が hard error 0 で終了（重複キー・非マッピング・YAML 構文・name/description は hard error。推奨見出しの警告は内容を確認して取捨）。
 - 追加したスキルの `## Verification` が実コマンドと期待値で書かれている。
-- 公開先へ入れる前に、秘密情報・固有パスの走査（例: `grep -rniE "(secret|password|token|/home/|<internal-name>)"`）を 1 回実行する。
+- 公開先へ入れる前に、秘密情報・固有パスの走査（例: `grep -rniE "(secret|password|token|private-root|internal-name)"`）を 1 回実行する。
 
 ## Failure handling
 
-- YAML パースエラー: `description` をシングルクォートで囲み、内部の `'` を 2 重化する。
+- YAML パースエラー: `description` をシングルクォートで囲み、内部の `'` を 2 重化するか、`>-` の folded block にする。重複キーは片方を削除する。
 - `name` 不一致: ディレクトリ名と同じにする（リネームはスキル名の互換性に影響）。
 - 検証器が `missing recommended section` を警告: 実行可能性に必要なら見出しを追加、不要なら理由を本文に書く。
 - description が長い/曖昧: 実際の能力と適用条件を 1〜2 文に絞る（列挙をやめる）。

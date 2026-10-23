@@ -28,6 +28,10 @@ different agent type.
 - Run inbox checks as their own bounded tool calls. Do not combine an inbox call
   with a large file dump: the call consumes messages even when the display is
   truncated.
+- Keep one dedicated free dispatch pane for control. Do not type or `poke` into
+  a controller pane that is busy processing: its prompt belongs to its own
+  input loop. If the dispatch pane is occupied, wait for it to become free or
+  use another owned free pane; never inject keystrokes into a busy controller.
 
 ## ACK, steering and READY
 
@@ -62,6 +66,11 @@ different agent type.
 
 ## Failure handling
 
+- A cancellation acknowledgement, a timeout, an HTTP error or a closed
+  frontend is not proof that a remote model/session is inactive. When the
+  provider exposes its own session/run state, reconcile the owned session there
+  before retrying, relaunching or repeating a side effect. Preserve the
+  interrupted attempt and do not present it as a completed or comparable run.
 - If a frontend exited before consuming steering, dispatch a new bounded
   assignment after reconciling any remaining job; do not keep resending the
   same unread instruction.

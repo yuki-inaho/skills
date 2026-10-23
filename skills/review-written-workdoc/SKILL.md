@@ -21,7 +21,7 @@ Read `references/review-rubric.md` before reviewing. Use it as the canonical che
 
 ## Workflow
 
-1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, and any referenced files. Follow command wrappers such as `rtk` when required.
+1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, `CLAUDE.md`, `OPENCODE.md`, and any referenced files. Follow command wrappers such as `rtk` when required. If the workdoc or review report will be public, do not copy real paths, identifiers, session text or private project data into it.
 2. Locate the target workdoc:
    - If the user gives a path, review that file.
    - If the user does not give a path, search `temp/` for `workdoc_*.md` and review the newest one by modification time.

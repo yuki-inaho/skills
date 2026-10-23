@@ -40,7 +40,7 @@ git status --short
 git diff --stat
 git diff --name-only
 git log --oneline -5
-rg --files
+rg --files        # rg が無い環境では: find . -type f -not -path './.git/*'
 ```
 
 5. Inspect project-specific evidence mentioned by the workdoc: changed files, test files, generated artifacts, command outputs, screenshots, logs, and temp files. If the workdoc references uv or justfile checks, inspect `pyproject.toml`, `uv.lock`, and `justfile` when present.
@@ -71,6 +71,7 @@ rg --files
   goal `一部達成` or `未達` and explain the scope mismatch.
 - If repository state is dirty, distinguish user-existing changes from current verification observations when possible.
 - If the workdoc's definition of done is too vague to verify, mark the item `未確認` or `一部達成` and explain the ambiguity.
+- If the completion summary will be public, do not copy real paths, repository/project identifiers, session logs, user names or private results into it. Describe the evidence category and keep the private source in the private workspace.
 
 ## Output Behavior
 

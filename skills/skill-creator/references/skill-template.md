@@ -27,5 +27,5 @@ description: 'Use when <適用条件>. Triggers: <語>, <語>.'
 - <症状>: <原因> -> <対処>
 
 ## Growth log
-- 追記先: [references/growth-log.md](references/growth-log.md)。
+- 追記先: `references/growth-log.md`（生成先スキルのルートからの相対パス）。
 ```

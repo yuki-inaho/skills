@@ -33,7 +33,7 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`write-workdoc-docker`](skills/write-workdoc-docker/SKILL.md) | `write-workdoc-uv` の Docker / docker compose 版（テンプレート付き） |
 | [`handover`](skills/handover/SKILL.md) | Auto-Compact 用の日本語引き継ぎ文書をチャットに出力（ファイルは作らない） |
 | [`grill-me`](skills/grill-me/SKILL.md) | 設計木の **frontier を 1 ラウンドで一括**質問（上限は指定数・既定10）。事実は自分で調査し、決定だけを聞く。各問に「なぜ/推奨」 |
-| [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、同梱の依存ゼロ検証器、公開前サニタイズ） |
+| [`skill-creator`](skills/skill-creator/SKILL.md) | スキルの新規作成・改善（frontmatter の罠、推奨構成、依存を宣言した strict YAML 検証器、公開前サニタイズ） |
 | [`supervisor-orchestration`](skills/supervisor-orchestration/SKILL.md) | 監督エージェントの振り分け・検証・統合（Bloom ルーティング、サブエージェント並列、成長ログ） |
 | [`herdr-opencode-agmsg`](skills/herdr-opencode-agmsg/SKILL.md) | ユーザー可視の Herdr ペインで OpenCode ワーカーを統括（agmsg の ACK/READY、編集可能な catalog による provider 順序・free 禁止・限定切替、owned tab の終了条件。純粋な判断ヘルパー同梱） |
 | [`demo-rehearsal`](skills/demo-rehearsal/SKILL.md) | デモの時間設計（説明秒・理解待ち秒）と聴衆エージェント PDCA（汎用ペルソナ付き） |
@@ -41,12 +41,14 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`mujoco-web-wasm-demo`](skills/mujoco-web-wasm-demo/SKILL.md) | MuJoCo をブラウザで（公式 WASM + three.js）。フック公開とスクショ検証 |
 | [`public-repository-privacy-review`](skills/public-repository-privacy-review/SKILL.md) | 公開リポジトリへ出す直前の点検（公開境界・差分・例/fixture・docs・metadata・PR 本文/コメント。機械走査は手掛かり限定、承認ゲートにはしない） |
 
-`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` / `start-with-workdocs` / `start-work-with-docs` /
-`check-finished-workdoc` / `start-work-audit-pattern` / `handover` / `supervisor-orchestration` /
-`demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` / `harness2-portable-workflow` /
-`herdr-opencode-agmsg` には Codex 等向けの
-`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
-`check-finished-workdoc` には `references/` にテンプレート / rubric、`start-work-audit-pattern` には `assets/` にプロンプトと役割ファイルを同梱。
+一部のスキルは、エージェント別メタデータ `agents/openai.yaml`、補助資料
+`references/`、実行用 `scripts/`、テンプレート `assets/` を同梱する。同梱物は
+スキルごとに異なるため、一覧はツリーを正とする。`skill-creator` は strict YAML
+検証器 `scripts/validate_skill.py` も同梱する。
+
+<!-- BEGIN GENERATED:openai-metadata -->
+`agents/openai.yaml` を同梱するスキル（16）: `check-finished-workdoc`, `demo-rehearsal`, `grill-me`, `handover`, `harness2-portable-workflow`, `herdr-opencode-agmsg`, `mujoco-web-wasm-demo`, `playwright-cli-automation`, `review-written-workdoc`, `skill-creator`, `start-with-workdocs`, `start-work-audit-pattern`, `start-work-with-docs`, `supervisor-orchestration`, `write-workdoc-docker`, `write-workdoc-uv`
+<!-- END GENERATED:openai-metadata -->
 
 ## クイックインストール（curl）
 
@@ -108,12 +110,40 @@ cp -r skills/skills/<skill-name> ~/.codex/skills/
 - API キー・トークン・認証情報・メールアドレス
 - 実データ・会話ログ・PII
 
+## 開発と検証
+
+検証環境は uv で固定する。依存関係と Python 版は `pyproject.toml` / `uv.lock` /
+`.python-version` に宣言し、仮想環境はリポジトリへコミットしない。
+
+```bash
+uv sync --locked --group dev
+just check          # 1 コマンド集約: validate + test + privacy + ruff/compile
+just lint           # ruff + compileall（check の一部）
+just test           # pytest（全テスト）
+just validate       # 全 SKILL.md の strict YAML frontmatter
+just privacy        # 公開テキストの分類レポート（証跡。承認ゲートではない）
+just test-contract  # 外部 agent-jsonl-compact 契約（REQUIRE_AGENT_JSONL=1 の専用プロファイル）
+```
+
+`uv sync --locked` / `uv run --locked` は `pyproject.toml` と `uv.lock` の不一致を
+検出して失敗する（古い lock をそのまま使わない）。`just check` は
+外部 CLI を必須にしない。外部契約は `just test-contract` または CI の専用ジョブで、
+`REQUIRE_AGENT_JSONL=1` により欠落・旧版を skip ではなく失敗として扱う。
+
+`just` は薄いラッパーであり、各レシピの実体は `uv run --locked ...` で直接実行できる。
+スキルごとの検証範囲と「何を証明しないか」は
+[`docs/skill-coverage.md`](docs/skill-coverage.md) に、設計判断と検証限界は
+[`docs/adr/0001-public-portable-skill-boundary.md`](docs/adr/0001-public-portable-skill-boundary.md)
+と
+[`docs/adr/0002-reproducible-validation-and-evaluation.md`](docs/adr/0002-reproducible-validation-and-evaluation.md)
+に記録する。
+
 ## 由来
 
-2026-09-12 時点で著者のローカルスキルライブラリから、JAX GPU 学習プロジェクトで
-実際に使用したスキルを抽出して配置した。2026-09-28 に、常用している workdoc 系スキル
-（`start-work-with-docs` / `check-finished-workdoc` / `start-work-audit-pattern` / `write-workdoc-docker`）を追加し、
-`agent-jsonl-compact-reader` を配布元の最新版へ更新した。
+複数のプロジェクトで再利用した判断・手順を、公開可能な形に一般化して収録する。
+個別案件の理論・評価条件・結果・作業記録・案件専用スキルは、その案件側で管理する。
+技術やツールに特化したスキルは扱うが、特定のプロジェクトや実行基盤への依存は持ち込まない。
+上流由来のファイルは、それぞれのライセンスと帰属を保持する。
 
 ## ライセンス
 

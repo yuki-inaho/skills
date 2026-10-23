@@ -1,0 +1,63 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.5"
+          enable-cache: true
+      - name: Sync locked dev environment
+        run: uv sync --locked --group dev
+      # Same underlying command set and order as the justfile `check` aggregate.
+      - name: Lint and compile
+        run: |
+          uv run --locked ruff check .
+          uv run --locked python -m compileall -q skills tests
+      - name: Validate every SKILL.md
+        run: uv run --locked python skills/skill-creator/scripts/validate_skill.py
+      - name: Test
+        run: uv run --locked pytest tests -q
+      - name: Privacy evidence report (not a gate)
+        run: uv run --locked python tests/privacy_scan.py
+
+  agent-jsonl-contract:
+    runs-on: ubuntu-latest
+    env:
+      AGENT_JSONL_VERSION: "0.3.1"
+      AGENT_JSONL_ASSET: agent-jsonl-compact-x86_64-unknown-linux-musl.tar.gz
+      AGENT_JSONL_SHA256: fb633da4d64a868225634ebd0e05fcf71d807633cfc32c37bb71b0b638267e62
+      REQUIRE_AGENT_JSONL: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.5"
+          enable-cache: true
+      - name: Install pinned agent-jsonl-compact with verified checksums
+        run: |
+          set -euo pipefail
+          base="https://github.com/yuki-inaho/agent-jsonl-compact/releases/download/v${AGENT_JSONL_VERSION}"
+          curl -fsSLO "${base}/${AGENT_JSONL_ASSET}"
+          curl -fsSLO "${base}/${AGENT_JSONL_ASSET}.sha256"
+          grep -q "^${AGENT_JSONL_SHA256}  ${AGENT_JSONL_ASSET}$" "${AGENT_JSONL_ASSET}.sha256"
+          sha256sum -c "${AGENT_JSONL_ASSET}.sha256"
+          mkdir -p "${RUNNER_TEMP}/agent-jsonl-compact"
+          tar -xzf "${AGENT_JSONL_ASSET}" -C "${RUNNER_TEMP}/agent-jsonl-compact"
+          binary="$(find "${RUNNER_TEMP}/agent-jsonl-compact" -type f -name agent-jsonl-compact | head -n 1)"
+          test -n "${binary}"
+          test -x "${binary}"
+          echo "AGENT_JSONL_COMPACT=${binary}" >> "${GITHUB_ENV}"
+      - name: Sync locked dev environment
+        run: uv sync --locked --group dev
+      - name: Required external contract (never a green all-skipped claim)
+        run: uv run --locked pytest tests/test_agent_jsonl_contract.py -q

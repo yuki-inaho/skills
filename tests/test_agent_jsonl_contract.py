@@ -1,8 +1,9 @@
 """agent-jsonl-compact 0.3.0 以降の CLI 契約を合成 JSONL で確認する。
 
 スキル本文が案内する「版確認 → 閲覧系 → 根拠位置 → partial/retry → tool 対応」が、
-実際のバイナリで成立することを固定する。旧版しか無い環境では skip する
-（スキル側は legacy 抽出へのフォールバックを案内している）。
+実際のバイナリで成立することを固定する。通常のローカル実行では、旧版しか無い場合に
+skip する（スキル側は legacy 抽出へのフォールバックを案内している）。CI の専用ジョブ
+と `REQUIRE_AGENT_JSONL=1` では、欠落・旧版・version 非対応を skip ではなく失敗にする。
 """
 
 from __future__ import annotations
@@ -14,31 +15,65 @@ import subprocess
 from pathlib import Path
 
 import pytest
-
 from conftest import parse_jsonl
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 CODEX = FIXTURES / "synthetic_codex.jsonl"
 CLAUDE = FIXTURES / "synthetic_claude.jsonl"
 MIN_VERSION = (0, 3, 0)
+REQUIRED = os.environ.get("REQUIRE_AGENT_JSONL") == "1"
+
+
+def prerequisite_action(status: tuple[str, str], required: bool) -> str:
+    """Map a probe status to run/fail/skip. Explicit required mode never skips."""
+    if status[0] == "ok":
+        return "run"
+    return "fail" if required else "skip"
+
+
+def _gate(status: tuple[str, str]) -> None:
+    action = prerequisite_action(status, REQUIRED)
+    if action == "skip":
+        pytest.skip(status[1])
+    if action == "fail":
+        pytest.fail(status[1])
+
+
+def probe_status(candidate: str | None) -> tuple[str, str]:
+    """Return ('ok'|'missing'|'unsupported'|'old', public message)."""
+    if not candidate or not Path(candidate).is_file():
+        return ("missing", "agent-jsonl-compact が見つからない（AGENT_JSONL_COMPACT か PATH で指定）")
+    try:
+        probe = subprocess.run(
+            [candidate, "version", "--output", "json"], capture_output=True, text=True
+        )
+    except OSError as error:
+        return ("unsupported", f"agent-jsonl-compact を実行できない: {error.__class__.__name__}")
+    if probe.returncode != 0:
+        return ("unsupported", "閲覧系を持たない旧バイナリ（legacy フォールバック対象）")
+    try:
+        info = json.loads(probe.stdout)
+        version = tuple(int(part) for part in str(info["version"]).split(".")[:3])
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return ("unsupported", "version --output json の形式が契約と一致しない")
+    if version < MIN_VERSION:
+        return ("old", f"0.3.0 未満 ({info['version']})")
+    return ("ok", str(info["version"]))
 
 
 def _binary() -> str:
     candidate = os.environ.get("AGENT_JSONL_COMPACT") or shutil.which("agent-jsonl-compact")
-    if not candidate or not Path(candidate).is_file():
-        pytest.skip("agent-jsonl-compact が見つからない（AGENT_JSONL_COMPACT か PATH で指定）")
+    _gate(probe_status(candidate))
+    assert candidate is not None
     return candidate
 
+
 def _version_info() -> dict:
+    binary = _binary()
     probe = subprocess.run(
-        [_binary(), "version", "--output", "json"], capture_output=True, text=True
+        [binary, "version", "--output", "json"], capture_output=True, text=True
     )
-    if probe.returncode != 0:
-        pytest.skip("閲覧系を持たない旧バイナリのため skip（legacy フォールバック対象）")
     info = json.loads(probe.stdout)
-    version = tuple(int(part) for part in info["version"].split(".")[:3])
-    if version < MIN_VERSION:
-        pytest.skip(f"0.3.0 未満 ({info['version']}) のため skip")
     return info
 
 
@@ -285,3 +320,48 @@ def test_append_cursor_reads_only_new_lines(tmp_path: Path) -> None:
     assert appended.returncode == 0, appended.stderr
     events, _ = parse_jsonl(appended.stdout)
     assert [event["text"] for event in events] == ["appended_marker"]
+
+
+# ---- required-mode gate (no real binary needed) ---------------------------
+
+
+def test_required_mode_fails_instead_of_skipping_missing_binary() -> None:
+    status = ("missing", "not installed")
+    assert prerequisite_action(status, required=False) == "skip"
+    assert prerequisite_action(status, required=True) == "fail"
+
+
+def test_required_mode_fails_instead_of_skipping_old_binary() -> None:
+    status = ("old", "0.2.0")
+    assert prerequisite_action(status, required=False) == "skip"
+    assert prerequisite_action(status, required=True) == "fail"
+
+
+def test_required_mode_fails_instead_of_skipping_unsupported_version_probe() -> None:
+    status = ("unsupported", "no version subcommand")
+    assert prerequisite_action(status, required=False) == "skip"
+    assert prerequisite_action(status, required=True) == "fail"
+
+
+def test_probe_detects_a_legacy_fake_binary(tmp_path: Path) -> None:
+    fake = tmp_path / "agent-jsonl-compact"
+    fake.write_text(
+        "#!/usr/bin/env bash\n"
+        'if [ "${1:-}" = "version" ]; then\n'
+        '  printf \'{"name":"agent-jsonl-compact","version":"0.2.0"}\\n\'\n'
+        "  exit 0\n"
+        "fi\n"
+        "exit 1\n",
+        encoding="utf-8",
+    )
+    fake.chmod(0o755)
+    status = probe_status(str(fake))
+    assert status[0] == "old"
+    assert "0.2.0" in status[1]
+
+
+def test_probe_detects_an_unsupported_version_probe(tmp_path: Path) -> None:
+    fake = tmp_path / "agent-jsonl-compact"
+    fake.write_text("#!/usr/bin/env bash\nexit 1\n", encoding="utf-8")
+    fake.chmod(0o755)
+    assert probe_status(str(fake))[0] == "unsupported"

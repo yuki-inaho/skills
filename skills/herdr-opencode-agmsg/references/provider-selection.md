@@ -7,29 +7,31 @@ from task completion and artifact quality.
 ## The editable catalog is the allowlist
 
 The allowed providers, registry base IDs, supported reasoning variants,
-capabilities and free-model policy live in `assets/model_catalog.json`. Edit
-that file (or pass another file with `--catalog`) for the task; do not encode
-the allowlist only in prose and do not change global auth or defaults for one
-run.
+capabilities and free-model policy live in a catalog file. The bundled
+`assets/model_catalog.json` is a neutral empty template with no provider or
+model defaults. Copy `assets/model_catalog.example.json` to a private,
+non-committed catalog, or pass another file with `--catalog`, for the task. Do
+not encode the allowlist only in prose and do not change global auth or
+defaults for one run. An empty catalog stops with `catalog_unconfigured`; it
+never falls back to a vendor or model.
 
 ```json
 {
-  "policy_version": 3,
-  "provider_order": ["PROVIDER_A", "PROVIDER_B"],
-  "default_variant": "high",
-  "prefer_capabilities": ["1017"],
+  "policy_version": 1,
+  "provider_order": ["example-provider-a", "example-provider-b"],
+  "default_variant": "standard",
+  "prefer_capabilities": ["cap-example"],
   "models": [
-    {"id": "PROVIDER_A/MODEL-BUILD", "free": false, "capabilities": ["1017"], "variants": ["high"]},
-    {"id": "PROVIDER_A/MODEL", "free": false, "capabilities": [], "variants": ["high"]}
+    {"id": "example-provider-a/example-model", "free": false, "capabilities": [], "variants": ["standard"]},
+    {"id": "example-provider-a/example-model-large", "free": false, "capabilities": ["cap-example"], "variants": ["standard"]}
   ]
 }
 ```
 
-The bundled catalog lists the currently allowed DeepSeek V4.1 Flash1017 or
-Flash entries as editable defaults for Ollama Cloud, OpenCode Go and OpenRouter,
-with `1017` marked as a capability and preferred within its provider. Replace
-the entries when the user changes the allowlist. Capability tags are generic
-markers such as a build/version requirement; they are not a quality claim.
+The example is synthetic and exists only to show the shape. It is not a
+provider recommendation and its IDs are not the tested default. Capability tags
+are generic markers such as a build/version requirement; they are not a quality
+claim.
 
 Selection is the intersection of:
 
@@ -51,8 +53,9 @@ base ID, then build the invocation from `default_variant`, the task variant, or
 the per-entry variant. A variant that the catalog entry does not support is not
 silently substituted; the request stops with `variant_unsupported`.
 
-`ollama-cloud/...:1017` and `ollama-cloud/...-1017` are model-name build tags,
-not free markers. Keep them as the catalog base IDs exactly as discovered.
+Provider-specific build tags in a model ID are part of the ID, not free
+markers. Keep the catalog base IDs exactly as discovered; do not rewrite a
+provider's naming convention into a generic rule.
 
 ## Discover, then verify
 

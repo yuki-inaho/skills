@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 from typing import Any
 
 STATES = {"running", "exited", "unknown"}
@@ -76,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        text = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
+        text = sys.stdin.read() if args.input == "-" else Path(args.input).read_text(encoding="utf-8")
         request = json.loads(text)
         decision = gate(request)
     except (OSError, ValueError, json.JSONDecodeError) as error:

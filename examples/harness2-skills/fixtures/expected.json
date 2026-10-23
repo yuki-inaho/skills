@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "expected": {
+    "agent-jsonl-compact-reader--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "agent-jsonl-compact-reader--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "check-finished-workdoc--boundary": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "check-finished-workdoc--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "complete"
+    },
+    "demo-rehearsal--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "demo-rehearsal--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "complete"
+    },
+    "grill-me--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "grill-me--positive": {
+      "decision": "ask",
+      "output_target": "chat",
+      "completion": "incomplete"
+    },
+    "handover--boundary": {
+      "decision": "inspect",
+      "output_target": "chat",
+      "completion": "incomplete"
+    },
+    "handover--positive": {
+      "decision": "proceed",
+      "output_target": "chat",
+      "completion": "complete"
+    },
+    "harness2-portable-workflow--boundary": {
+      "decision": "stop",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "harness2-portable-workflow--positive": {
+      "decision": "keep_base",
+      "output_target": "none",
+      "completion": "complete"
+    },
+    "herdr-opencode-agmsg--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "herdr-opencode-agmsg--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "complete"
+    },
+    "jax-performance-tuning--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "jax-performance-tuning--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "mujoco-web-wasm-demo--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "mujoco-web-wasm-demo--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "playwright-cli-automation--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "playwright-cli-automation--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "public-repository-privacy-review--boundary": {
+      "decision": [
+        "stop",
+        "inspect"
+      ],
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "public-repository-privacy-review--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "complete"
+    },
+    "review-measurement-contract--boundary": {
+      "decision": "inspect",
+      "output_target": "chat",
+      "completion": "incomplete"
+    },
+    "review-measurement-contract--positive": {
+      "decision": "proceed",
+      "output_target": "chat",
+      "completion": "complete"
+    },
+    "review-written-workdoc--boundary": {
+      "decision": "proceed",
+      "output_target": "chat",
+      "completion": "incomplete"
+    },
+    "review-written-workdoc--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "skill-creator--boundary": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "skill-creator--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-with-workdocs--boundary": {
+      "decision": "stop",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-with-workdocs--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-work-audit-pattern--boundary": {
+      "decision": "stop",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-work-audit-pattern--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-work-with-docs--boundary": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "start-work-with-docs--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "complete"
+    },
+    "supervisor-orchestration--boundary": {
+      "decision": "inspect",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "supervisor-orchestration--positive": {
+      "decision": "proceed",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "write-evidence-based-adr--boundary": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "write-evidence-based-adr--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "write-workdoc-docker--boundary": {
+      "decision": [
+        "stop",
+        "inspect"
+      ],
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "write-workdoc-docker--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "write-workdoc-uv--boundary": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    },
+    "write-workdoc-uv--positive": {
+      "decision": "proceed",
+      "output_target": "repo",
+      "completion": "incomplete"
+    }
+  },
+  "scope": "synthetic workflow decision fields; not real runtime validation"
+}

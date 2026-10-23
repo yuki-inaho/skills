@@ -1,6 +1,6 @@
 ---
 name: demo-rehearsal
-description: Use when rehearsing a user-facing demo before showing it, when designing a demo time budget with per-section explanations and comprehension waits, or when running an audience-agent PDCA loop. Triggers: デモをリハーサル, 聴衆エージェント, デモの時間設計, リハーサル PDCA, user demo preparation.
+description: 'Use when rehearsing a user-facing demo before showing it, when designing a demo time budget with per-section explanations and comprehension waits, or when running an audience-agent PDCA loop. Triggers: デモをリハーサル, 聴衆エージェント, デモの時間設計, リハーサル PDCA, user demo preparation.'
 ---
 
 # Demo Rehearsal
@@ -21,7 +21,9 @@ description: Use when rehearsing a user-facing demo before showing it, when desi
 
 - リハーサルと本番で証跡の取得経路を揃える。ライブ提示のみ headed にする。
 - 撮影枚数・所要時間を記録する。スクリーンショットが**同一画像になっていない**ことを
-  サイズやハッシュの多様性で確認する（操作が効いていない検知）。
+  内容ハッシュと、ピクセル差分または既知の view state（`__status()` など）の変化で確認する。
+  バイトサイズの多様性は高速な前処理にだけ使う（別画像が同サイズになり得るし、
+  同一内容でも圧縮ノイズでサイズは変わり得る）。
 
 ### C — Check（聴衆エージェント、各 1 体ずつ独立コンテキスト）
 
@@ -41,10 +43,13 @@ description: Use when rehearsing a user-facing demo before showing it, when desi
 
 ## Verification
 
-- スクリーンショット数が仕様どおりで、内容が互いに異なる（サイズ多様性で機械確認）。
+- スクリーンショット数が仕様どおりで、内容が互いに異なる（内容ハッシュ + ピクセル差分
+  または既知の view state で機械確認。サイズは前処理のみ）。
 - 実測時間が設計の ±30% に収まる。
 - 聴衆評価の平均理解度 ≥ 4、かつ「判断に不足」が 0 件（未解決は明記）。
 - 台本に「曖昧語・陳腐化した表現」が残っていない（横断 grep）。
+- スクリーンショット・台本・聴衆メモを公開する場合は、実データ・実パス・個人情報を
+  含めない（必要な場合は一般化または省略する）。
 
 ## Failure handling
 

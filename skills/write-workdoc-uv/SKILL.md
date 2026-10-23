@@ -14,11 +14,11 @@ Create a self-contained Japanese work plan and work record for another agent to 
 
 ## Required Reference
 
-Before writing the workdoc, read `references/workdoc-template.md`. Preserve the template structure and the "作業記録"注意事項 unless the user explicitly asks for a different format.
+Before writing the workdoc, read `references/workdoc-template.md`. Preserve the template structure and the "作業記録"注意事項 unless the user explicitly asks for a different format. Keep the workdoc free of real secrets, private repository names, absolute home paths and customer data; use placeholders or synthetic values.
 
 ## Workflow
 
-1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, and any referenced files. Follow command wrappers such as `rtk` when required.
+1. Read local repository instructions first, including `AGENTS.md`, `CODEX.md`, `CLAUDE.md`, `OPENCODE.md`, and any referenced files. Follow command wrappers such as `rtk` when required.
 2. Confirm the current timestamp with:
 
 ```bash

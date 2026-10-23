@@ -1,0 +1,26 @@
+{
+  "policy_version": 1,
+  "provider_order": ["example-provider-a", "example-provider-b"],
+  "default_variant": "standard",
+  "prefer_capabilities": ["cap-example"],
+  "models": [
+    {
+      "id": "example-provider-a/example-model",
+      "free": false,
+      "capabilities": [],
+      "variants": ["standard"]
+    },
+    {
+      "id": "example-provider-a/example-model-large",
+      "free": false,
+      "capabilities": ["cap-example"],
+      "variants": ["standard"]
+    },
+    {
+      "id": "example-provider-b/example-model",
+      "free": false,
+      "capabilities": [],
+      "variants": ["standard"]
+    }
+  ]
+}

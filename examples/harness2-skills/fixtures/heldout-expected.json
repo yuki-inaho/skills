@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "expected": {
+    "mixed-evidence-claims": {
+      "decision": "inspect",
+      "output_target": "chat",
+      "completion": "incomplete"
+    },
+    "mixed-publication-remote": {
+      "decision": "stop",
+      "output_target": "none",
+      "completion": "incomplete"
+    },
+    "mixed-workdoc-drift": {
+      "decision": "inspect",
+      "output_target": "repo",
+      "completion": "incomplete"
+    }
+  },
+  "scope": "mixed synthetic workflow decisions, held out from editor inputs"
+}
