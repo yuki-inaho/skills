@@ -102,11 +102,22 @@ known to be limited to that model.
 | `code_failure` | failing tests, lint, traceback, validation error | Fix with the same model. This is not provider unavailability. |
 | `unknown` | no receipt, truncated error, unclear frontend exit | Inspect processes, receipts and partial output before any launch. |
 
+A monthly credit balance is separate from service connectivity and short-window
+rate limits. ECONNREFUSED, ETIMEDOUT, public API failure or a generic 429 are not
+evidence of exhausted monthly credits. Mark quota exhaustion only from an
+explicit provider/account response. Public API HTTP 200 and a model listing do
+not establish successful authenticated inference.
+
 A generic error string does not identify which provider failed. Compare it with
 the actual launch argv and the saved receipt before naming a cause.
 
 ## Bounded attempt rules
 
+- For a confirmed shared endpoint/network failure, record `transient` with
+  `scope: "provider"`. After `provider_transient_limit` failures (default 2),
+  skip all sibling models on that provider for this attempt cycle. This is a
+  transport budget, not a quota classification. Clear that cycle only after new
+  recovery evidence; do not erase the historical receipts.
 - One bounded retry is reasonable for a transient failure that respects
   Retry-After and the deadline. Quota exhaustion is not transient.
 - Keep one attempt per allowed candidate unless new evidence or user direction
@@ -151,3 +162,56 @@ not prove successful inference. Read the pane and inspect the actual result.
 
 When comparing models, state that the runs are not a same-condition quality
 comparison unless inputs, settings, repetitions and evaluation criteria match.
+
+
+## Connect decisions to actual launches
+
+The planner alone does not switch a running OpenCode process. Use the bundled
+one-attempt launcher instead of a hard-coded `--model` wrapper. It inherits the
+visible pane's stdout/stderr and working directory, uses a fresh native session,
+and writes a private decision/receipt without copying the prompt or environment.
+Read installed `opencode run --help` first; the launcher uses `run --standalone
+--model` and optional `--auto`.
+
+```bash
+python3 scripts/provider_launch.py --input private/request.json \
+  --assignment private/assignment.txt --attempt-dir private/attempt-01 \
+  --timeout 180
+```
+
+The assignment contains a fresh nonce, identity, scope and ACK requirement. The
+request uses the planner schema plus `live_job_possible: false` (confirmed before
+every launch) and `reconciled: true` for subsequent attempts. `--auto` is optional
+and only appropriate within previously authorized work. Parent evidence directory
+must already exist; each attempt directory must be new. The timeout is a budget
+chosen for the work, not a universal 180-second inference limit.
+
+Coordinator loop:
+
+1. Read inventory and the user's authorized provider order. Keep `1017` in
+   `prefer_capabilities` when preferred; only set `required_capabilities: ["1017"]`
+   when it is actually mandatory. The latter excludes an undated Go model and
+   may select OpenRouter's 1017 entry instead. Do not call an undated Go model
+   the same snapshot, and do not replace a strict version constraint silently.
+2. Prepare the request and a fresh scope packet, register ownership, and run the
+   launcher in the worker's visible tab. It refuses blocked planner decisions.
+3. Observe live structured message errors while the frontend runs. Internal
+   retries can continue without process exit; the launcher enforces the timeout.
+   Save native session/model/error evidence before the deadline where possible.
+4. Inspect the receipt **and** owned server/jobs/partial artifacts. A killed
+   frontend, exit zero, or an expired timer does not prove model success,
+   provider failure, or absence of external side effects. Unknown stays unknown.
+5. For a confirmed provider error, append the exact candidate/outcome/scope to
+   `attempts`, preserve Retry-After, update the remaining deadline and set
+   `reconciled: true` only after reconciliation. Run the launcher with a **new**
+   assignment and directory. Already-authorized fallback needs no new permission.
+   For auth errors repair the configuration; for task/test failures keep the model.
+6. Accept results only after the task's independent verification. The launcher
+   deliberately leaves receipt `outcome` unknown even on exit zero. Stop when
+   planner candidates/deadline are exhausted; never reset attempts to loop.
+
+The launcher terminates only its own process group on timeout/interruption.
+Detached private servers/jobs can escape that group and must still be reconciled;
+therefore this is coordinator-driven fallback, not an unattended restart daemon.
+No global default model, credentials, retention settings or provider account
+settings are modified by these helpers.

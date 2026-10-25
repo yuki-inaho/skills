@@ -52,7 +52,7 @@ that Herdr is unavailable; it only means this process has no inherited context.
    fresh nonce and require an ACK that states the nonce, identity and scope.
    A sent message is not proof of reading, and an ACK is not proof that the
    work or its verification was completed.
-4. **Select the provider from the catalog.** Read
+4. **Select the provider from the catalog, then use that decision to launch.** Read
    [provider-selection.md](references/provider-selection.md). Select only the
    intersection of the editable catalog, the discovered IDs, the non-free
    policy, the task allowlist/override (narrowing only) and the attempt/quota
@@ -67,6 +67,14 @@ that Herdr is unavailable; it only means this process has no inherited context.
    asking again; an unavailable model is candidate-specific. Never select an
    unlisted or free ID and never silently change the model family, version or
    variant. Never edit global auth or default configuration for one run.
+   Use `scripts/provider_launch.py` for each attempt (see the provider-selection
+   reference). It connects the planner to the actual `--model` argument and bounds
+   OpenCode internal retries with a process deadline. It runs one attempt; the
+   coordinator classifies, reconciles, updates the request and launches the next
+   allowed candidate without asking again when fallback was already authorized.
+   Do not replace an authorized fallback order with a single-provider override
+   merely because the first provider is preferred. A strict user restriction
+   still wins.
 5. **Message and poll correctly.** Use
    [coordination-protocol.md](references/coordination-protocol.md). Deliver
    bodies as literal argv lists, read the complete inbox at phase boundaries
@@ -91,8 +99,9 @@ that Herdr is unavailable; it only means this process has no inherited context.
 
 ## Bounded helpers
 
-Two pure decision helpers are bundled. They read a JSON request, print one JSON
-decision and never touch the network, credentials, Herdr or global settings.
+Two pure decision helpers and one bounded launcher are bundled. The decision
+helpers read a JSON request, print one JSON decision and never touch the network,
+credentials, Herdr or global settings.
 
 ```bash
 python3 scripts/provider_plan.py --input request.json
@@ -109,6 +118,11 @@ python3 scripts/cleanup_gate.py --input request.json
   required capability stops instead of silently substituting a model.
 - `cleanup_gate.py` returns `wait`, `inspect`, `collect_evidence`,
   `refuse_not_owned` or `close` from ownership and exit evidence.
+
+`provider_launch.py` executes one selected attempt in the visible caller pane,
+records its PID/exit, and enforces a wall-clock timeout. It does not classify
+provider errors, accept work, supervise detached jobs, or automatically repeat
+side effects. See the reference for the coordinator loop.
 
 The helpers are advisory gates, not authorization. The coordinator still reads
 the actual process, pane and artifact evidence before acting.

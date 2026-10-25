@@ -33,6 +33,8 @@ Request keys:
   transient_retry_limit     transient retries within that cap (default 1)
   retry_after_seconds       Retry-After attached to the latest transient error
   remaining_seconds         remaining deadline; retry requires it to fit
+  provider_transient_limit  provider-scoped transport failures before skipping
+                            all its models (default 2); never means quota used
 
 Outcomes: success, quota_exhausted, transient, auth_error, unavailable_model,
 code_failure, unknown. Discovery and catalog inventory prove only that an ID is
@@ -383,6 +385,15 @@ def plan(request: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any]:
         notes.append("owned work may still be running; fallback is blocked until reconciled")
         return result("reconcile", "live_job_may_still_run")
 
+    provider_limit = _count(request.get("provider_transient_limit"), "provider_transient_limit", 2)
+    if provider_limit < 1:
+        _fail("provider_transient_limit must be at least 1")
+    provider_failures: dict[str, int] = {}
+    for attempt in attempts:
+        if attempt["scope"] == "provider" and attempt["outcome"] == "transient":
+            provider = attempt["candidate"].split("/", 1)[0]
+            provider_failures[provider] = provider_failures.get(provider, 0) + 1
+
     if not available:
         if required_caps and any(item["reason"] == "capability_missing" for item in excluded):
             return result("stop", "required_capability_missing")
@@ -399,6 +410,12 @@ def plan(request: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any]:
     for entry in available:
         invocation = invocations[entry["id"]]
         history = [item["outcome"] for item in attempts if item["candidate"] == invocation]
+        if history and history[-1] == "success":
+            return result("done", "latest_attempt_succeeded", invocation)
+        if (provider_failures.get(entry["provider"], 0) >= provider_limit
+                and (not history or history[-1] not in {"auth_error", "code_failure", "unknown"})):
+            excluded.append({"candidate": entry["id"], "reason": "provider_transport_budget_exhausted"})
+            continue
         if not history:
             return result("launch", "not_attempted", invocation)
 
