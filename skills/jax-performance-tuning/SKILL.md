@@ -1,6 +1,7 @@
 ---
 name: jax-performance-tuning
-description: Speed up JAX compilation, enable persistent compilation caches, and improve JAX run-time performance on GPU boxes (including Blackwell / cuDNN 9 / multi-GPU). Use when a JAX job recompiles every run, compile takes minutes, steps/samples-per-second are low, GPU utilization is poor, or when asked to profile/tune/cache JAX workloads. Triggers include: JAX コンパイルが遅い, コンパイルキャッシュ, jax_compilation_cache_dir, XLA_FLAGS 最適化, BF16/AMP が効かない, GPU 使用率が低い, jax.profiler, micro-batch 調整.
+description: >-
+  Speed up JAX compilation, enable persistent compilation caches, and improve JAX run-time performance on GPU boxes (including Blackwell / cuDNN 9 / multi-GPU). Use when a JAX job recompiles every run, compile takes minutes, steps/samples-per-second are low, GPU utilization is poor, or when asked to profile/tune/cache JAX workloads. Triggers include: JAX コンパイルが遅い, コンパイルキャッシュ, jax_compilation_cache_dir, XLA_FLAGS 最適化, BF16/AMP が効かない, GPU 使用率が低い, jax.profiler, micro-batch 調整.
 ---
 
 # JAX Performance Tuning (compile cache + runtime)

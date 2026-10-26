@@ -1,6 +1,7 @@
 ---
 name: mujoco-web-wasm-demo
-description: Use when building a browser demo of a MuJoCo model (WASM forward kinematics + three.js rendering), embedding playback poses, exposing automation hooks, and capturing screenshots with playwright-cli. Triggers: MuJoCo ブラウザ, mujoco wasm, three.js で mujoco, Web デモ スクリーンショット.
+description: >-
+  Use when building a browser demo of a MuJoCo model (WASM forward kinematics + three.js rendering), embedding playback poses, exposing automation hooks, and capturing screenshots with playwright-cli. Triggers: MuJoCo ブラウザ, mujoco wasm, three.js で mujoco, Web デモ スクリーンショット.
 ---
 
 # MuJoCo Web (WASM) Demo

@@ -1,6 +1,7 @@
 ---
 name: demo-rehearsal
-description: Use when rehearsing a user-facing demo before showing it, when designing a demo time budget with per-section explanations and comprehension waits, or when running an audience-agent PDCA loop. Triggers: デモをリハーサル, 聴衆エージェント, デモの時間設計, リハーサル PDCA, user demo preparation.
+description: >-
+  Use when rehearsing a user-facing demo before showing it, when designing a demo time budget with per-section explanations and comprehension waits, or when running an audience-agent PDCA loop. Triggers: デモをリハーサル, 聴衆エージェント, デモの時間設計, リハーサル PDCA, user demo preparation.
 ---
 
 # Demo Rehearsal

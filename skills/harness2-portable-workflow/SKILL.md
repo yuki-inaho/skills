@@ -1,6 +1,7 @@
 ---
 name: harness2-portable-workflow
-description: Use when a workflow or skill needs a substantial Harness² Propose–Probe–Compose redesign or self-critique — fix baseline, settings, model and budget, probe candidates, reflect after selection, and report honest evidence. Not for small edits. Triggers: Harness2 で改善を検証する, propose-probe-compose, ワークフロー改善の比較, スキル改善の自己批判, KEEP_BASE 判断, Harness² run の監査.
+description: >-
+  Use when a workflow or skill needs a substantial Harness² Propose–Probe–Compose redesign or self-critique — fix baseline, settings, model and budget, probe candidates, reflect after selection, and report honest evidence. Not for small edits. Triggers: Harness2 で改善を検証する, propose-probe-compose, ワークフロー改善の比較, スキル改善の自己批判, KEEP_BASE 判断, Harness² run の監査.
 ---
 
 # harness2-portable-workflow

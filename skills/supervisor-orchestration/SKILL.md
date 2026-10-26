@@ -1,6 +1,7 @@
 ---
 name: supervisor-orchestration
-description: Use when acting as a supervisor (lead) agent that routes work to subagents, verifies their artifacts, and integrates results. Triggers: 監督エージェント, サブエージェントをばらまく, 並列エージェント監督, タスク振り分け, delegate to subagents, supervise parallel agents.
+description: >-
+  Use when acting as a supervisor (lead) agent that routes work to subagents, verifies their artifacts, and integrates results. Triggers: 監督エージェント, サブエージェントをばらまく, 並列エージェント監督, タスク振り分け, delegate to subagents, supervise parallel agents.
 ---
 
 # Supervisor Orchestration

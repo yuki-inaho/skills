@@ -1,6 +1,7 @@
 ---
 name: playwright-cli-automation
-description: Use when driving a browser autonomously with the global playwright-cli (open, eval, snapshot, screenshot, close), when collecting screenshots of a local page, or when the CLI fails in containers/scripts. Triggers: playwright-cli で操作, ブラウザを自動操作, スクリーンショット収集, playwright cli 動かない.
+description: >-
+  Use when driving a browser autonomously with the global playwright-cli (open, eval, snapshot, screenshot, close), when collecting screenshots of a local page, or when the CLI fails in containers/scripts. Triggers: playwright-cli で操作, ブラウザを自動操作, スクリーンショット収集, playwright cli 動かない.
 ---
 
 # Playwright CLI Automation
