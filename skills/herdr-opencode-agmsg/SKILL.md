@@ -181,3 +181,12 @@ skill. Prefer a narrow correction to a new universal rule.
   delivery, ACK/READY, inbox completeness and report files.
 - [visible-lifecycle.md](references/visible-lifecycle.md) — Herdr discovery,
   one-agent-per-tab visibility, roster evidence and cleanup gates.
+
+## Outcome-sized assignments
+
+- Delegate an input-to-artifact outcome, including routine fixes and validation within the authorized scope. ACK establishes receipt; it is not a new permission gate before each command.
+- Prefer one small real execution through the production entry point before broadening orchestration. Inspect the actual interpreter and child command when environment errors block output.
+- An ACK delay alone is not a reason to interrupt a worker: inspect its owned process and whether it can receive messages. Batch corrections so tool execution can finish.
+- Report verified artifacts and their target denominator separately from setup, documentation and tests. Recheck unchanged evidence only when a relevant change or new concern warrants it.
+
+- When steering changes a design boundary, read the inbox at the next completed command batch before publishing shared outputs. Generate a complete version before readers use it; do not rewrite configuration paths already referenced by active or completed runs.
