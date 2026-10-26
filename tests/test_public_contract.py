@@ -19,6 +19,8 @@ SKILLS = (
     ROOT / "skills" / "harness2-portable-workflow" / "SKILL.md",
     ROOT / "skills" / "public-repository-privacy-review" / "SKILL.md",
     ROOT / "skills" / "write-evidence-based-adr" / "SKILL.md",
+    ROOT / "skills" / "write-pull-request" / "SKILL.md",
+    ROOT / "skills" / "review-writing-clarity" / "SKILL.md",
     ROOT / "skills" / "review-measurement-contract" / "SKILL.md",
     ROOT / "skills" / "herdr-opencode-agmsg" / "SKILL.md",
 )
