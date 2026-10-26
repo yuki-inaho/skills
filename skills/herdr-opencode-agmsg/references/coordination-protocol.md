@@ -43,10 +43,14 @@ different agent type.
 - READY states the artifact path, test commands and actual results, failure
   before and success after, limitations, and the same nonce. Sending READY is
   not acceptance; the coordinator verifies the artifact independently.
-- For priority steering, record the send time and require an actual recipient
-  ACK within the stated interval. Inspect public tool events for a completed
-  inbox check after the send. A sent message without an ACK does not
-  reprioritize the worker.
+- For material steering, record the send time and confirm receipt at a tool
+  boundary. Delivery alone does not prove the new instruction was consumed.
+  Delayed ACKs during an active tool call do not justify replacement or restart.
+  Batch nonurgent corrections and let authorized work continue. Explicit stop
+  requests or evidence of an unsafe/out-of-scope action require prompt action.
+- The initial scoped assignment authorizes its normal steps. ACK receipt of a
+  material scope change, not every local fix; do not add a supervisor GO after
+  each successful check unless the user actually required that boundary.
 
 ## Reports
 
@@ -65,8 +69,10 @@ different agent type.
 - If a frontend exited before consuming steering, dispatch a new bounded
   assignment after reconciling any remaining job; do not keep resending the
   same unread instruction.
-- If a worker ignored the assigned identity or scope, reconcile its actual
-  process, interrupt only the owned frontend after the ACK deadline, and relaunch
-  a focused packet. Do not send more unread steering as a substitute.
+- If evidence shows a worker acting outside its assigned identity or scope,
+  reconcile the actual process and affected operation. Interrupt an owned
+  process only when needed to stop that violation, honor an explicit stop, or
+  recover a confirmed failure. ACK lateness alone is not such evidence. Preserve
+  valid work and reconcile remaining jobs before any replacement launch.
 - If the inbox contains an incomplete or conflicting instruction, ACK the
   material correction and record the lapse; do not silently reinterpret it.

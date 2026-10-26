@@ -1,167 +1,78 @@
 # Review Rubric For Written Workdocs
 
-Use this rubric to review a workdoc for self-consistency, self-containment, and operational clarity.
+Review operational clarity and the requested outcome, not template compliance.
+Apply only criteria relevant to the current user request. A compact plan may be
+self-contained without phase headings, trace IDs, or one checkbox per command.
 
-## 1. Context Completeness
+## Goal and context
 
-The workdoc is adequate only if another agent can understand the task without the original chat.
+- Can another agent identify the requested deliverables, actual working context,
+  inputs, constraints and completion criteria without guessing?
+- Are commands and paths concrete where needed for execution? Are unknowns
+  labelled rather than filled with invented facts?
+- Does the document distinguish explicit requirements from proposed targets and
+  optional improvements? Current user instructions override an obsolete plan.
 
-Check:
+Missing information is a finding when it can change execution or acceptance.
+Missing a preferred heading, boilerplate principle or trace-ID format is not.
 
-- The direct user goal is restated in plain language.
-- The work directory, repository name, and relevant project type are identified.
-- Target files, directories, modules, commands, and tests are concrete.
-- Required tools are explicit, especially `uv`, `just`, Docker, linters, formatters, and test runners.
-- Constraints are explicit: no implicit fallback, DRY/KISS/SOLID, t-wada TDD, traceability, and auditability.
+## Work units and dependencies
 
-Finding triggers:
+- Does the order follow real dependencies and lead to a usable result promptly?
+- Can a work unit include its related implementation, execution and focused
+  verification? Split it only for a useful dependency, ownership, risk or
+  independently checkable outcome.
+- Are scope and genuine stop conditions clear enough for the assignee to make
+  ordinary reversible repairs without repeated approval?
+- Do recording, review and supervisor messages support execution, or have they
+  become unnecessary prerequisites between every operation?
 
-- Blocker: The target task or repository context is unclear.
-- Major: Important files, commands, or assumptions are generic placeholders.
-- Minor: Context exists but could be easier to scan.
+Combining code and its test is not a defect. More checkboxes are not an
+improvement. Initial discovery is required only where proceeding without it
+would risk wrong work or harm; do not impose research/design gates universally.
 
-## 2. Goal Requirement Analysis
+## Verification and evidence
 
-The document must connect user intent to executable work.
+- Are checks proportionate to the change and sufficient for its claimed outcome?
+  Add fail-to-pass tests for relevant behavioral changes, not every minor edit.
+- Do manual checks state expected observations? Use project-native commands.
+- For experiments, identify relevant inputs, resolved settings, evaluation
+  split, baseline, selection rule, denominators, exclusions and timing scope.
+  Accuracy claims need appropriate independent evidence; unit tests and
+  implementation parity alone do not establish real-world accuracy.
+- Do changes invalidate only affected evidence? A wording correction should not
+  force a model rerun when inputs, implementation and artifacts are unchanged.
+- For speed or time-series claims, state the measured stages and relevant
+  hardware, warmup, lag or motion effects. Do not demand irrelevant fields.
 
-Check:
+## Failure handling and records
 
-- The goal analysis appears directly under `## 1. 作業目的`.
-- It contains intuitive user purpose, explicit requirements, implicit constraints, non-goals, success criteria, risks, and assumptions.
-- The analysis is specific to the requested task, not template boilerplate.
-- Success criteria are objective and testable.
+- Do likely failures have concrete remedies within the assigned scope?
+- Do material changes in data, semantics, evaluation or authority require the
+  appropriate decision, without turning routine fixes into new approval gates?
+- Does an actual blocker stop its affected operation while allowing independent
+  authorized work? Preserve explicit stop requests and required authorization.
+- Are recorded times derived from logs or the clock, with failures retained?
+  Batch records at useful milestones; continuous document edits are not a
+  prerequisite unless the user explicitly requests them.
 
-Finding triggers:
+## Completion and progress
 
-- Blocker: No goal analysis, or it contradicts the work plan.
-- Major: Missing success criteria, non-goals, or constraints.
-- Minor: Correct content exists but traceability labels are weak.
+- Are requested artifacts present and checked against the user outcome? Plans,
+  receipts and smoke tests cannot substitute for the requested full execution.
+- Keep unmet quality requirements visible. A failed experiment can satisfy a
+  request to run and report it, but cannot satisfy a requirement to improve it.
+- Separate plan-only completion from future execution. Report preparation apart
+  from usable results; do not derive overall progress from arbitrary checkboxes.
+- Use actual run state and throughput for estimates; unknown remains unknown.
 
-## 3. Subgoal And Traceability Mapping
+## Verdicts
 
-Work elements must be traceable from goal to evidence.
+- `PASS`: Executable and consistent with the requested outcome.
+- `PASS_WITH_NOTES`: Usable with nonblocking clarifications.
+- `REVISE`: Material ambiguities or missing evidence can cause wrong work.
+- `FAIL`: The task cannot be meaningfully executed, or contradicts the user goal.
 
-Check:
-
-- Subgoals have IDs such as `SG-1`.
-- Requirements or constraints have trace IDs such as `TR-1`.
-- Phases, checklist items, tests, commands, and definition-of-done items refer to those IDs.
-- Evidence expectations are clear: logs, test commands, changed files, screenshots, or work record entries.
-
-Finding triggers:
-
-- Blocker: No way to tell whether a requirement is covered.
-- Major: IDs exist but are not connected to concrete steps or evidence.
-- Minor: Mapping exists but is sparse or inconsistent in naming.
-
-## 4. Phase Separation
-
-Planning, research, implementation, verification, and recording must not be mixed.
-
-Check:
-
-- Research/design steps inspect and decide; they do not perform code changes.
-- Implementation steps are only after research/design gates.
-- Verification steps run tests, lint, format, type checks, E2E, or manual checks.
-- Work record instructions are separate from action steps and preserve caution notes.
-
-Finding triggers:
-
-- Blocker: The order could cause unsafe implementation before required discovery.
-- Major: Implementation tasks are embedded in research or verification is mixed with coding.
-- Minor: Headings are slightly unclear but execution order is still safe.
-
-## 5. Atomic Checklist Quality
-
-Every checklist item should be one unambiguous operation.
-
-Required form:
-
-```markdown
-### 手順 n: <目的を端的に>
-- [ ] 🖐 **操作**: <コマンド／編集内容など>
-- [ ] 🔎 **確認**: <期待結果>
-- [ ] 🧪 **テスト**: <テストケース名／初期失敗・後成功の確認方法>
-- [ ] 🛠 **エラー時対処**: <代表的なエラーと解決策>
-```
-
-Check:
-
-- Each step performs one operation.
-- Dependencies are ordered.
-- Expected results are concrete.
-- Test/TDD guidance is present or explicitly justified as not applicable.
-- Error handling is specific, not "確認する" only.
-
-Finding triggers:
-
-- Blocker: Checklist is missing or too vague to execute.
-- Major: Steps combine multiple operations, omit tests, or omit expected results.
-- Minor: Steps are usable but could be split further.
-
-## 6. TDD And Verification
-
-Testing guidance should let an agent observe fail-to-pass behavior when feasible.
-
-Check:
-
-- New behavior has named tests or test files.
-- The expected initial failure is described before implementation.
-- The passing command is concrete, preferably `uv run pytest ...`.
-- Quality gates are explicit: lint, format, type checks, build, or project-specific just targets.
-- Manual verification has expected observations.
-- Data-dependent claims identify a baseline, an evaluation sample/split chosen before tuning, units, denominators, exclusions, and failure/unknown coverage.
-- Accuracy evidence is independent of the model being evaluated. Numerical parity, accepted-point residuals, visual smoothness, and unit-test success are not treated as interchangeable evidence of real-world accuracy.
-- Time-series comparisons measure lag and motion preservation alongside jitter; throughput claims state included stages, warmup, hardware, and offline versus causal execution. Apply these checks only when relevant to the requested task.
-
-Finding triggers:
-
-- Blocker: There is no credible verification for user-facing or risky changes.
-- Major: Tests are generic commands without target, expected result, or fail-to-pass plan.
-- Minor: Verification exists but could be narrower or faster.
-
-## 7. Error Handling And No Implicit Fallback
-
-Errors must be anticipated and routed through explicit decisions.
-
-Check:
-
-- Common command failures have likely causes and next steps.
-- Missing files, missing dependencies, absent Git repository, absent justfile, or absent uv lock are handled explicitly.
-- The document does not say to silently use an alternative path, tool, or behavior.
-- Blockers instruct the agent to record evidence and ask/stop when necessary.
-
-Finding triggers:
-
-- Blocker: The plan depends on silent fallback or hidden assumptions.
-- Major: Error handling is present but too generic to guide recovery.
-- Minor: Rare error cases are not covered.
-
-## 8. Definition Of Done
-
-Completion criteria must be objective.
-
-Check:
-
-- Each item is checkable with a command, artifact, diff, or explicit observation.
-- The definition of done maps to goal analysis and trace IDs.
-- It includes documentation/work record completion when auditability is required.
-- It does not use vague criteria like "properly", "as needed", or "確認する" without expected result.
-- Requested quality/performance outcomes have their own gates. Logging an unmet outcome does not satisfy that gate, and a completed document review does not mark the user outcome achieved.
-- For plan-only requests, planning completion and future execution/outcome gates are separate. Proposed thresholds are labelled as proposals, not agreed user requirements or already measured achievements.
-
-Finding triggers:
-
-- Blocker: No objective completion criteria.
-- Major: Criteria exist but do not cover the stated goal.
-- Major: A checked completion item substitutes execution/reporting for an unmet user-facing quality outcome, or evaluation selects only successful samples.
-- Minor: Criteria are good but not fully mapped to trace IDs.
-
-## 9. Review Verdict Guidance
-
-Use the strictest applicable verdict:
-
-- `PASS`: No Blocker/Major findings; at most small Minor notes.
-- `PASS_WITH_NOTES`: No Blocker findings; one or more Minor findings, or a low-risk Major with a clear workaround already in the doc.
-- `REVISE`: Any Major finding that could cause wrong work, audit gaps, or repeated clarification.
-- `FAIL`: Any Blocker finding, or multiple Major findings that make the workdoc unreliable.
+Label findings Blocker/Major/Minor by their actual execution impact. A document
+verdict is not new execution authority: identify the affected operation and
+repair scope instead of stopping all work because of formatting or audit polish.

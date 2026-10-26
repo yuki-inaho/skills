@@ -38,6 +38,20 @@ that Herdr is unavailable; it only means this process has no inherited context.
    or pass a task copy with `--catalog`. Discovery comes separately from the
    installed model listing, which normally prints base IDs without `#variant`.
 
+## Delegation boundary
+
+Assign a usable outcome with its scope, inputs, end condition and genuine stop
+conditions. The initial assignment covers ordinary reversible implementation,
+local repairs and required verification within that scope. Do not invent a new
+START/GO/READY approval for each substep. Preserve explicit user approval rules.
+
+When supervising another coordinator, let that coordinator manage its workers.
+Review artifacts and material milestones; batch nonurgent corrections. Do not
+poll for reassurance or send repeated steering that makes receipt handling the
+worker's main job. A delayed ACK is not proof of disobedience or a stopped job.
+Respect requests for autonomy or no workdoc; roster/log evidence can remain in
+the existing task state without a new planning document.
+
 ## Procedure
 
 1. **Write the roster first.** For each worker record: agmsg identity and type,
@@ -48,10 +62,11 @@ that Herdr is unavailable; it only means this process has no inherited context.
    the role and task, and make the run visible. Redirecting output to a file
    without a visible bridge fails the visibility requirement even when the
    process is alive. Record the launch argv, start time and actual exit.
-3. **Acknowledge before editing.** Give each worker a scoped assignment with a
+3. **Acknowledge the assignment before editing.** Give each worker a scoped assignment with a
    fresh nonce and require an ACK that states the nonce, identity and scope.
    A sent message is not proof of reading, and an ACK is not proof that the
-   work or its verification was completed.
+   work or its verification was completed. This ACK starts the scoped work;
+   routine steps and corrections do not require another approval exchange.
 4. **Select the provider from the catalog, then use that decision to launch.** Read
    [provider-selection.md](references/provider-selection.md). Select only the
    intersection of the editable catalog, the discovered IDs, the non-free
@@ -88,9 +103,12 @@ that Herdr is unavailable; it only means this process has no inherited context.
    [visible-lifecycle.md](references/visible-lifecycle.md). Verify the live
    worker, read the actual pane, and save a rendered snapshot. Heartbeats,
    Herdr `idle` state and accepted admissions do not establish completion.
-8. **Verify independently.** Check actual artifacts, exit codes, hashes and
-   positive denominators. Parse structured outputs. A worker's summary,
-   `exit 0`, a model listing or a READY message is a claim, not verification.
+8. **Verify the outcome independently.** Inspect the actual deliverable and
+   the checks relevant to its correctness. Use exit codes, structured results,
+   input identity or denominators where they support that decision. Reuse valid
+   evidence; repeat checks only when a change or failure affects them. A summary,
+   `exit 0` or READY alone does not establish the requested outcome. Correcting
+   a receipt's wording does not invalidate unchanged artifacts.
 9. **Clean up owned resources last.** Close only tabs created by this run,
    after the owned frontend and its jobs have actually exited and the
    completion evidence is collected. Preserve user tabs, servers and unrelated

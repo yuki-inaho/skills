@@ -3,8 +3,8 @@ name: write-workdoc-uv
 description: >-
   Create detailed Japanese workdoc Markdown files for uv-based development under
   temp/ with filename format workdoc_Apr16-2026_*.md, goal and subgoal analysis,
-  phase-separated research, design, implementation, atomic checklist actions,
-  TDD expectations, error handling, and traceability. Use when the user says
+  dependency-aware work units, relevant verification, error handling, and
+  evidence of the requested outcomes. Use when the user says
   write_workdoc_uv, asks to create a workdoc, 作業計画書, 作業記録, 作業書, or UV作業書.
 ---
 
@@ -14,7 +14,7 @@ Create a self-contained Japanese work plan and work record for another agent to 
 
 ## Required Reference
 
-Before writing the workdoc, read `references/workdoc-template.md`. Preserve the template structure and the "作業記録"注意事項 unless the user explicitly asks for a different format.
+Read `references/workdoc-template.md` as a starting point. Scale its detail to the requested handoff; omit inapplicable sections rather than manufacturing work. A current request for no workdoc overrides an earlier workflow preference. Do not create or review a document as a prerequisite to already-authorized execution unless the user requires it.
 
 ## Workflow
 
@@ -36,9 +36,9 @@ Use `temp/workdoc_<date-token>_<slug>.md`, for example `temp/workdoc_Apr16-2026_
 5. Inspect the project enough to make the document executable by another agent: repository layout, uv files such as `pyproject.toml` and `uv.lock`, tests, `justfile`, entry points, and relevant source modules.
 6. Create `temp/` if needed and write the workdoc there.
 7. Fill every placeholder with concrete information. Do not leave bracket placeholders like `[ファイル名]` unless the user explicitly requested a blank template.
-8. Separate planning, research, implementation, and verification. Do not mix implementation steps into the research phase.
-9. Add a goal requirement analysis section directly under `## 1. 作業目的`. Include the user's intuitive goal, explicit requirements, implicit constraints, subgoal structure, success criteria, non-goals, and traceability IDs.
-10. Tie every phase, task, checklist item, command, and definition-of-done item back to the goal analysis or traceability IDs.
+8. Order work by actual dependencies and the path to a usable result. A coherent unit may include implementation, execution and its focused verification; do not create approval gates between these by default.
+9. State the user's goal, required artifacts, success criteria, constraints and material assumptions near the start. Distinguish required outcomes from optional improvements.
+10. Connect each work unit to a requested outcome and evidence. Use trace IDs only when they help a complex handoff; a compact plan need not assign an ID to every command.
 
 ## Outcome And Evidence Boundaries
 
@@ -57,31 +57,21 @@ For evolving artifacts, distinguish current results from dated intermediate snap
 
 ## Checklist Policy
 
-Every checklist step must be a minimal, single-operation action with this exact Markdown form:
+Use one checkable outcome per work unit, with enough commands, paths, expected
+results and likely failure handling for the recipient to execute it. Combine
+related edits and their verification. Split only when dependencies, ownership,
+risk or independent acceptance make the split useful. More checkboxes are not
+more progress. Include regression tests when the change warrants them; do not
+invent a fail-to-pass exercise for every reversible edit.
 
-```markdown
-### 手順 n: <目的を端的に>
-- [ ] 🖐 **操作**: <コマンド／編集内容など>
-- [ ] 🔎 **確認**: <期待結果>
-- [ ] 🧪 **テスト**: <テストケース名／初期失敗・後成功の確認方法>
-- [ ] 🛠 **エラー時対処**: <代表的なエラーと解決策>
-```
-
-For each step:
-
-- Make the action atomic and ordered.
-- Make completion objectively checkable.
-- Include TDD fail-to-pass guidance whenever the task can reasonably be tested.
-- Include likely errors and concrete remedies.
-- Prefer many small steps over a broad checklist item.
+Identify what genuinely blocks execution and what the assignee can fix within
+existing authorization. Record milestone results using actual logs/timestamps;
+do not make continuous document updates a prerequisite to the next operation.
 
 ## Verification Before Finishing
 
-Before answering the user, verify:
-
-- The file exists under `temp/` and matches `workdoc_<Mon><DD>-<YYYY>_*.md`.
-- The document includes concrete repository context and no unresolved generic placeholders.
-- The goal analysis is directly under `## 1. 作業目的`.
-- Planning, research, implementation, and verification are phase-separated.
-- The checklist uses the required four-line action format for every `### 手順 n`.
-- The work record caution notes remain in the document.
+- The requested document exists at the agreed path (default `temp/workdoc_<Mon><DD>-<YYYY>_*.md`).
+- Context, deliverables, dependencies, commands and completion criteria are concrete.
+- Every retained work unit contributes to the requested outcome; optional improvements do not block it.
+- Checks are proportionate and relevant; changed evidence is distinguished from still-valid evidence.
+- Unknowns, failures and genuine decision boundaries are explicit. No invented results or generic placeholders remain.

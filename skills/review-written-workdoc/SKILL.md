@@ -5,7 +5,7 @@ description: >-
   understand the context and execute the work without ambiguity. Use when the
   user says review_written_workdoc, asks to review or audit a workdoc, 作業書,
   作業計画書, 作業記録, or asks whether goal analysis, work elements, definitions
-  of done, atomic checklists, phase separation, TDD guidance, error handling, and
+  of done, executable work units, dependencies, verification, error handling, and
   traceability are self-consistent, self-contained, and well-defined. By default,
   after reviewing, apply safe improvements to the workdoc unless the user
   explicitly asks for review-only/no-edit behavior.
@@ -17,7 +17,7 @@ Review an existing workdoc as an audit agent, then improve it by default. Priori
 
 ## Required Reference
 
-Read `references/review-rubric.md` before reviewing. Use it as the canonical checklist for scoring and findings.
+Read `references/review-rubric.md` before reviewing. Apply only the requested scope. This review assesses a document; it does not add an execution approval gate. Respect a later request for no workdoc and do not force a compact plan into a larger template.
 
 ## Workflow
 
@@ -27,7 +27,7 @@ Read `references/review-rubric.md` before reviewing. Use it as the canonical che
    - If the user does not give a path, search `temp/` for `workdoc_*.md` and review the newest one by modification time.
    - If multiple likely files exist and no intent is clear, state the candidates and choose the newest only when that is a reasonable assumption.
 3. Read the whole target workdoc. If needed, inspect nearby repository files referenced by the document to verify whether commands, paths, tests, and claims are concrete.
-4. Review for executable clarity, not prose polish. Treat missing context, vague steps, untestable completion criteria, mixed phases, and traceability gaps as findings.
+4. Review for executable clarity, not prose polish. Treat missing context, vague outcomes, untestable completion criteria, broken dependencies, and missing evidence as findings. Also identify needless approvals or recording steps that delay usable results.
 5. Lead with findings ordered by severity. Use file references with exact lines when possible.
 6. Decide an initial overall verdict:
    - `PASS`: Another agent can execute the work with only minor improvements.
@@ -49,9 +49,9 @@ Evaluate the document against these questions:
 - Is the user's direct goal stated in plain language, with explicit success criteria?
 - Is the goal decomposed into subgoals that map to phases, checklist items, tests, and definition of done?
 - Can another agent understand the repository context, target files, commands, dependencies, and constraints without reading the original chat?
-- Are planning, research, implementation, verification, and recording phases separated?
-- Are checklist items atomic, ordered, verifiable, and written as one operation per step?
-- Does each step include operation, expected result, test/TDD guidance, and error handling?
+- Do actual dependencies determine the order, with a clear path to the first usable result?
+- Are work units coherent, verifiable, and sized for execution without repeated supervisor approval?
+- Are checks and failure handling proportionate to the actual change? Avoid tests or phase gates added solely to satisfy a template.
 - Are uv and justfile expectations explicit when the project uses Python or has a `justfile`?
 - Are implicit fallbacks avoided, with explicit blockage handling instead?
 - Does the document support audit traceability through IDs, evidence locations, command outputs, and work log instructions?
@@ -84,7 +84,7 @@ Use this format unless the user asks for another one:
 - ゴール要求分析: <adequate / partial / missing>
 - サブゴールと作業要素の対応: <adequate / partial / missing>
 - 完了の定義: <adequate / partial / missing>
-- チェックリスト原子性: <adequate / partial / missing>
+- 作業単位と依存関係: <adequate / partial / missing>
 - TDD/検証可能性: <adequate / partial / missing>
 - エラー時対処: <adequate / partial / missing>
 - トレーサビリティ: <adequate / partial / missing>
@@ -108,10 +108,10 @@ Severity labels:
 
 Default behavior is review-and-fix. When editing the workdoc:
 
-- Preserve the user's intent and the original template structure.
+- Preserve the user's intent and useful existing structure; current user scope takes precedence over the template.
 - Fix missing context by adding concrete repository facts, paths, commands, tests, and expected outputs.
-- Replace broad checklist items with the required atomic action format.
-- Keep work record caution notes intact.
+- Clarify vague work units without multiplying approval, test or recording steps.
+- Keep useful evidence instructions; remove obsolete process requirements that conflict with current user scope.
 - Do not invent fake completed results. Mark unknowns as explicit assumptions or investigation steps.
 - Prefer narrow, auditable patches over rewriting the whole document.
 - Do not apply edits when the user says review-only, no-edit, audit only, レビューだけ, or equivalent.
