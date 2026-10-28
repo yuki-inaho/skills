@@ -1,0 +1,42 @@
+name: Synthetic file transfer live test
+on:
+  push:
+    branches: [codex/file-transfer-skills-20261028]
+    paths: [.github/workflows/file-transfer-live.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fetch exact tested revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init -q source
+          git -C source remote add origin https://github.com/yuki-inaho/skills.git
+          git -C source fetch -q --depth=1 origin "$GITHUB_SHA"
+          git -C source checkout -q --detach FETCH_HEAD
+          test "$(git -C source rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -m venv .venv
+          .venv/bin/pip -q install playwright==1.55.0
+      - name: One 4096-byte synthetic upload and verified download
+        run: .venv/bin/python source/skills/anonymous-file-transfer/scripts/live_roundtrip.py --output run --allow-synthetic-live-upload
+      - name: Preserve public evidence and exact source
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: transfer-public-evidence
+          path: |
+            run/public/
+            source/skills/anonymous-file-transfer/scripts/live_roundtrip.py
+          retention-days: 2
+      - name: Preserve isolated synthetic test receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: synthetic-transfer-private-receipt
+          path: run/private/
+          retention-days: 1
