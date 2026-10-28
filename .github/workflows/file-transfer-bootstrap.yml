@@ -1,0 +1,61 @@
+name: File transfer skill bootstrap
+on:
+  push:
+    branches: [codex/file-transfer-skills-20261028]
+    paths: [.github/workflows/file-transfer-bootstrap.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bootstrap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Fetch pinned public Harness2 and CLI runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          git init -q upstream
+          git -C upstream remote add origin https://github.com/yuki-inaho/harness2.git
+          git -C upstream fetch -q --depth=1 origin c5457cd88448ffc1e85a7e9589206c9b1e6549b2
+          git -C upstream checkout -q --detach FETCH_HEAD
+          test "$(git -C upstream rev-parse HEAD)" = c5457cd88448ffc1e85a7e9589206c9b1e6549b2
+          git -C upstream archive --format=tar HEAD | gzip -n > artifact/harness2-source.tar.gz
+          npm install --prefix cli-runtime --ignore-scripts @playwright/cli
+          node -p "require('./cli-runtime/node_modules/@playwright/cli/package.json').version" > artifact/playwright-cli-version.txt
+          tar -czf artifact/cli-runtime.tar.gz cli-runtime
+          python3 -m venv .venv
+          .venv/bin/pip -q install playwright==1.55.0
+      - name: Read public landing-page controls only
+        shell: bash
+        run: |
+          .venv/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          out=Path('artifact'); result={'operation':'public_landing_page_read_only','upload_attempted':False}
+          try:
+            with sync_playwright() as p:
+              browser=p.chromium.launch(channel='chrome',headless=True)
+              page=browser.new_page()
+              page.goto('https://gigafile.nu/',wait_until='domcontentloaded',timeout=30000)
+              result['url']=page.url
+              result['title']=page.title()
+              result['text']=page.locator('body').inner_text()[:18000]
+              result['controls']=page.locator('input,button,select,a').evaluate_all('(els)=>els.map(e=>({tag:e.tagName,type:e.type||null,id:e.id,name:e.name||null,text:(e.innerText||e.value||e.title||e.getAttribute("aria-label")||"").slice(0,160),href:e.getAttribute("href")}))')
+              page.screenshot(path=str(out/'landing-page.png'),full_page=False)
+              result['status']='read'
+              browser.close()
+          except Exception as e:
+            result['status']='blocked'; result['error']=str(e)[:1500]
+          (out/'landing-page-probe.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          PY
+          (cd artifact && sha256sum *.gz > SHA256SUMS)
+      - name: Preserve source and public probe
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: file-transfer-bootstrap
+          path: artifact/
+          retention-days: 2
+          if-no-files-found: error
