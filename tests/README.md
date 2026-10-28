@@ -7,6 +7,9 @@
 python3 -m pytest tests -q
 ```
 
+GitHub ActionsではPRとmainへのpush時に全テストを実行する。CLIの契約テストには
+公開リリース `agent-jsonl-compact` 0.5.1をチェックサム検証して使用する。
+
 - `test_public_contract.py` — 公開物の構造だけを見る（各 `SKILL.md` の frontmatter が
   name/description として成立し、ディレクトリ名と一致する、README が方針と各スキルを
   参照している、同梱物が想定内）。加えて、変更した公開ファイルに実在パス・メール・
