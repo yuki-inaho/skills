@@ -26,7 +26,8 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`write-evidence-based-adr`](skills/write-evidence-based-adr/SKILL.md) | 問題・代替案・観測証跡・実装状況に紐づく ADR を書き、またはレビューする（提案と決着、未検証事項を分離） |
 | [`write-pull-request`](skills/write-pull-request/SKILL.md) | 現行差分と検証結果からPR本文を作成・修正する。子リポジトリと親の試験範囲、確認済みと未確認を分ける |
-| [`review-writing-clarity`](skills/review-writing-clarity/SKILL.md) | 造語・曖昧な抽象表現を点検し、数値・条件・失敗を残して説明や文書を言い直す |
+| [`write-issue`](skills/write-issue/SKILL.md) | 不具合・説明と動作の不一致を、原文の該当箇所・再現結果・修正案に結び付けて報告する。文案、本文更新、コメント追加を区別する |
+| [`review-writing-clarity`](skills/review-writing-clarity/SKILL.md) | 依頼の目的・意味・根拠を保って文章を推敲する。k16shikano氏の文章規範を[版固定・出典付き](skills/review-writing-clarity/references/upstream.md)で同梱 |
 | [`review-measurement-contract`](skills/review-measurement-contract/SKILL.md) | 実験結果・ベンチマーク・進捗指標が主張する比較を支えるか点検（母集団・分母・設定・版の差、再計算、次の最小確認） |
 | [`start-with-workdocs`](skills/start-with-workdocs/SKILL.md) | workdoc のチェックリストを上から 1 つずつ実行し、チェック直後に作業記録を更新、DoD まで継続（40 行動ごとのリマインダー付き。利用者の指示文をそのまま使う簡易版） |
 | [`start-work-with-docs`](skills/start-work-with-docs/SKILL.md) | 上の詳細版（常用版）。開始時確認、1 項目ずつの対象・完了条件・変更範囲の明示、失敗時は `[ ]` のまま記録、N（既定 40）の変更規則、DoD と成果物実在まで確認する完了判定 |

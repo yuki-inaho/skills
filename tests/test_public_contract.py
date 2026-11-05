@@ -20,6 +20,7 @@ SKILLS = (
     ROOT / "skills" / "public-repository-privacy-review" / "SKILL.md",
     ROOT / "skills" / "write-evidence-based-adr" / "SKILL.md",
     ROOT / "skills" / "write-pull-request" / "SKILL.md",
+    ROOT / "skills" / "write-issue" / "SKILL.md",
     ROOT / "skills" / "review-writing-clarity" / "SKILL.md",
     ROOT / "skills" / "review-measurement-contract" / "SKILL.md",
     ROOT / "skills" / "herdr-opencode-agmsg" / "SKILL.md",
@@ -102,6 +103,9 @@ def test_changed_public_files_have_no_private_data() -> None:
     scanned.extend(sorted(new_skill.rglob("*.py")))
     scanned.extend(sorted(new_skill.rglob("*.yaml")))
     scanned.extend(sorted(new_skill.rglob("*.json")))
+    writing_references = ROOT / "skills" / "review-writing-clarity" / "references"
+    scanned.extend(sorted(writing_references.rglob("*.md")))
+    scanned.extend(sorted(writing_references.rglob("LICENSE")))
     scanned.extend(sorted((ROOT / "tests").rglob("*.py")))
     scanned.extend(sorted((ROOT / "tests").rglob("*.md")))
     scanned.extend(sorted((ROOT / "tests" / "fixtures").glob("*.jsonl")))
@@ -112,6 +116,8 @@ def test_changed_public_files_have_no_private_data() -> None:
     url = re.compile(r"https?://([^/\s\"'`)<>]+)")
     allowed_hosts = {
         "github.com",
+        "gist.github.com",
+        "unlicense.org",
         "codeload.github.com",
         "raw.githubusercontent.com",
         "127.0.0.1",
