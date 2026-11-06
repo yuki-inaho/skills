@@ -9,6 +9,8 @@ python3 -m pytest tests -q
 
 GitHub ActionsではPRとmainへのpush時に全テストを実行する。CLIの契約テストには
 公開リリース `agent-jsonl-compact` 0.5.1をチェックサム検証して使用する。
+このCIはJSONLの既存契約を確認するもので、v2 export対応を検証するものではない。
+v2 exportの挙動テストは[配布元のE2E](https://github.com/yuki-inaho/agent-jsonl-compact/blob/main/tests/opencode_v2_export_e2e.rs)にある。
 
 - `test_public_contract.py` — 公開物の構造だけを見る（各 `SKILL.md` の frontmatter が
   name/description として成立し、ディレクトリ名と一致する、README が方針と各スキルを
