@@ -1,0 +1,4 @@
+interface:
+  display_name: "Herdr 承認付き操作（非公式）"
+  short_description: "承認範囲内で既存ペインを特定し、状況確認・指示送信・情報待ちへの回答を行う"
+  default_prompt: "$herdr-authorized-operator を使い、指定した Herdr のエージェントを特定し、承認した範囲で状況確認と指示送信を行ってください。"
