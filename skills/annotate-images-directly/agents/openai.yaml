@@ -1,0 +1,4 @@
+interface:
+  display_name: "画像の直接アノテーション"
+  short_description: "画像の点・矩形・輪郭を直接注釈し、参照を隔離して検証する再利用可能な手順"
+  default_prompt: "Use $annotate-images-directly to annotate each supplied image, verify the visible boundaries, and evaluate only after freezing the answers."
