@@ -22,6 +22,7 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`jax-performance-tuning`](skills/jax-performance-tuning/SKILL.md) | JAX のコンパイルキャッシュ・BF16/AMP・micro-batch・remat・プロファイリング・Blackwell/cuDNN9 安定化 |
 | [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | Codex / Claude Code / OpenCode run JSONLと、対応ビルドのOpenCode v2 export JSONを根拠位置つきで閲覧・検索。v2 exportは `view`/`search` 専用で、公開タグv0.5.1は非対応（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
 | [`harness2-portable-workflow`](skills/harness2-portable-workflow/SKILL.md) | Harness² の Propose–Probe–Compose を、比較条件を固定し選定後の再評価まで含めて監査（合成タスク・証跡重視。出典: https://github.com/yuki-inaho/harness2 / 上流 Google Research, Apache-2.0） |
+| [`annotate-images-directly`](skills/annotate-images-directly/SKILL.md) | 画像ごとに独立して点・BBOX・ポリゴンを目視注釈。案件定義・座標規約を分離し、幾何確認・原画像上の確認・回答確定後の評価を区別する |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`write-evidence-based-adr`](skills/write-evidence-based-adr/SKILL.md) | 問題・代替案・観測証跡・実装状況に紐づく ADR を書き、またはレビューする（提案と決着、未検証事項を分離） |

@@ -24,6 +24,7 @@ SKILLS = (
     ROOT / "skills" / "review-writing-clarity" / "SKILL.md",
     ROOT / "skills" / "review-measurement-contract" / "SKILL.md",
     ROOT / "skills" / "herdr-opencode-agmsg" / "SKILL.md",
+    ROOT / "skills" / "annotate-images-directly" / "SKILL.md",
 )
 
 
@@ -103,6 +104,9 @@ def test_changed_public_files_have_no_private_data() -> None:
     scanned.extend(sorted(new_skill.rglob("*.py")))
     scanned.extend(sorted(new_skill.rglob("*.yaml")))
     scanned.extend(sorted(new_skill.rglob("*.json")))
+    annotation_skill = ROOT / "skills" / "annotate-images-directly"
+    for suffix in ("*.md", "*.py", "*.yaml", "*.json"):
+        scanned.extend(sorted(annotation_skill.rglob(suffix)))
     writing_references = ROOT / "skills" / "review-writing-clarity" / "references"
     scanned.extend(sorted(writing_references.rglob("*.md")))
     scanned.extend(sorted(writing_references.rglob("LICENSE")))
@@ -122,6 +126,7 @@ def test_changed_public_files_have_no_private_data() -> None:
         "raw.githubusercontent.com",
         "127.0.0.1",
         "localhost",
+        "www.w3.org",  # SVG standard namespace URI, not an external request.
     }
 
     for path in scanned:
