@@ -22,6 +22,7 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 | [`jax-performance-tuning`](skills/jax-performance-tuning/SKILL.md) | JAX のコンパイルキャッシュ・BF16/AMP・micro-batch・remat・プロファイリング・Blackwell/cuDNN9 安定化 |
 | [`agent-jsonl-compact-reader`](skills/agent-jsonl-compact-reader/SKILL.md) | Codex / Claude Code / OpenCode run JSONLと、対応ビルドのOpenCode v2 export JSONを根拠位置つきで閲覧・検索。v2 exportは `view`/`search` 専用で、公開タグv0.5.1は非対応（配布元: https://github.com/yuki-inaho/agent-jsonl-compact） |
 | [`harness2-portable-workflow`](skills/harness2-portable-workflow/SKILL.md) | Harness² の Propose–Probe–Compose を、比較条件を固定し選定後の再評価まで含めて監査（合成タスク・証跡重視。出典: https://github.com/yuki-inaho/harness2 / 上流 Google Research, Apache-2.0） |
+| [`write-onboarding-doc`](skills/write-onboarding-doc/SKILL.md) | 新規エージェントが現状の成果物・文書・実行環境を順に確認し、作業を再開するための `ONBOARDING.md` を作成・更新（テンプレート付き） |
 | [`write-workdoc-uv`](skills/write-workdoc-uv/SKILL.md) | uv 前提の日本語作業計画書兼記録書（workdoc）を `temp/` に作成（テンプレート付き） |
 | [`review-written-workdoc`](skills/review-written-workdoc/SKILL.md) | workdoc を rubric でレビューし、既定で安全な改善を適用 |
 | [`write-evidence-based-adr`](skills/write-evidence-based-adr/SKILL.md) | 問題・代替案・観測証跡・実装状況に紐づく ADR を書き、またはレビューする（提案と決着、未検証事項を分離） |
@@ -49,7 +50,7 @@ Codex / Claude Code / OpenCode 互換は「同じ `SKILL.md` を読み込める�
 `check-finished-workdoc` / `start-work-audit-pattern` / `handover` / `supervisor-orchestration` /
 `demo-rehearsal` / `playwright-cli-automation` / `mujoco-web-wasm-demo` / `harness2-portable-workflow` /
 `herdr-opencode-agmsg` には Codex 等向けの
-`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
+`agents/openai.yaml` を同梱（`skill-creator` は検証スクリプト `scripts/validate_skill.py` も同梱）。`write-onboarding-doc` / `write-workdoc-uv` / `write-workdoc-docker` / `review-written-workdoc` /
 `check-finished-workdoc` には `references/` にテンプレート / rubric、`start-work-audit-pattern` には `assets/` にプロンプトと役割ファイルを同梱。
 
 ## クイックインストール（curl）
